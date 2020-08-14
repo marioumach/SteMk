@@ -1,0 +1,91 @@
+<div fxLayout="row" fxLayoutAlign="space-between start">
+    <h1 mat-dialog-title>
+
+        <span>{{data.article}}</span> 
+       
+  </h1>
+  <button mat-icon-button (click)="onNoClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+
+</div>
+<div fxLayout="row" fxLayoutAlign="space-around start">
+
+<h1 mat-dialog-title>
+
+    <span>Qte :</span> {{mainText}}
+   
+</h1>
+<h1 mat-dialog-title>
+
+    <span>Prix :</span><input matInput [(ngModel)]="data.prix" style="width: 75px;">
+   
+</h1>
+<h1 mat-dialog-title>
+
+    <span>Total :</span>{{mainText*data.prix}}
+   
+</h1>
+
+</div>
+
+<div class="row">
+    <div class="col-md-4 "><button class="w-100" mat-button (click)="pressKey('1')">1</button>
+    </div>
+    <div class="col-md-4"><button class="w-100"  mat-button (click)="pressKey('2')">2</button>
+    </div>
+    <div class="col-md-4"><button  class="w-100" mat-button (click)="pressKey('3')">3</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 "><button class="w-100" mat-button (click)="pressKey('4')">4</button>
+    </div>
+    <div class="col-md-4"><button class="w-100"  mat-button (click)="pressKey('5')">5</button>
+    </div>
+    <div class="col-md-4"><button  class="w-100" mat-button (click)="pressKey('6')">6</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 "><button class="w-100" mat-button (click)="pressKey('7')">7</button>
+    </div>
+    <div class="col-md-4"><button class="w-100"  mat-button (click)="pressKey('8')">8</button>
+    </div>
+    <div class="col-md-4"><button  class="w-100" mat-button (click)="pressKey('9')">9</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 "><button class="w-100" mat-button (click)="onDelete()"><mat-icon aria-hidden="false" aria-label="Example backspace icon">backspace</mat-icon></button>
+    </div>
+    <div class="col-md-4"><button class="w-100"  mat-button (click)="pressKey('0')">0</button>
+    </div>
+    <div class="col-md-4"><button  class="w-100" mat-button [mat-dialog-close]="mainText*data.prix" cdkFocusInitial><mat-icon aria-hidden="false" aria-label="Example check_box icon">check_box</mat-icon></button>
+    </div>
+</div>
+<style>
+    .mat-button{
+    line-height: 60px !important;
+    font-size: 30px !important;
+    color: #3f51b5;
+    }
+    span{
+        color: #3f51b5;
+
+    }
+ 
+</style>
+
+
+
+
+<!-- <h1 mat-dialog-title>Hi {{data.article}}</h1>
+<div mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field>
+    <mat-label>Favorite Animal</mat-label>
+    <input matInput [(ngModel)]="data.prix">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data.prix" cdkFocusInitial>Ok</button>
+</div> -->
