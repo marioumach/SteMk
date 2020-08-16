@@ -14,12 +14,17 @@ import { MatangModule } from "src/assets/matang.module";
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CalculeComponent } from "./Modal/calcule.component";
 import {MatTableModule} from '@angular/material/table';
-
+import { ShareService } from "src/services/share.service";
+import { HttpClientModule } from '@angular/common/http';
+import { DArticleComponent } from "./Modal/DArticle.component";
+import { CArticleComponent } from "./Modal/CArticle.component";
 @NgModule({
 
   declarations: [
     AppComponent,
-    CalculeComponent
+    CalculeComponent,
+    DArticleComponent,
+    CArticleComponent
   ],
   imports: [
     //firebase
@@ -34,9 +39,11 @@ import {MatTableModule} from '@angular/material/table';
     MatangModule,
     CdkTableModule,
     MatTableModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    HttpClientModule,
+
   ],
-  providers: [],
+  providers: [ShareService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

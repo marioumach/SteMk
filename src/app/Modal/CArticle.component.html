@@ -1,0 +1,66 @@
+<div class="dialog" fxLayout="column">
+    <mat-toolbar>
+        <h5>Article</h5>
+    </mat-toolbar>
+    <div class="body" fxLayout="column">
+
+
+        <div style="width:100%" fxLayoutGap="50px">
+            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Référence</mat-label>
+                    <input [formControl]="reference" matInput required>
+                </mat-form-field>
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Désignation</mat-label>
+                    <input [formControl]="designation" matInput required>
+                </mat-form-field>
+            </div>
+            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Stock Minimal</mat-label>
+                    <input type="number" [formControl]="stockMin" matInput required>
+                </mat-form-field>
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Stock Initial</mat-label>
+                    <input type="number" [formControl]="stockInit" matInput required>
+                </mat-form-field>
+            </div>
+            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Prix d'Achat</mat-label>
+                    <input type="number" [formControl]="prixAchat" matInput required>
+                </mat-form-field>
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Prix de Vente</mat-label>
+                    <input type="number" [formControl]="prixVente" matInput required>
+                </mat-form-field>
+            </div>
+            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Date d'Ajout</mat-label>
+                    <input type="date" [formControl]="dateAjout" matInput required>
+                </mat-form-field>
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Code de Confirmation</mat-label>
+                    <input type="password" [formControl]="password" matInput required>
+                </mat-form-field>
+        </div>
+    </div>
+
+<div class="dialog-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+    <button mat-stroked-button color="primary" [disabled]="isValid" (click)="ajoutArticle()">Enregistrer</button>
+    <button mat-stroked-button (click)="onNoClick()"> Annuler</button>
+</div></div>
+</div>
+<style>
+    mat-toolbar {
+        background: #3f51b5;
+        color: #fff;
+    }
+
+    .body {
+        padding: 20px;
+
+    }
+</style>

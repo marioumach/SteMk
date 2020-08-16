@@ -1,3 +1,4 @@
+<div  (keyup)="onTouche($event)">
 <div fxLayout="row" fxLayoutAlign="space-between start">
     <h1 mat-dialog-title>
 
@@ -60,6 +61,7 @@
     </div>
     <div class="col-md-4"><button  class="w-100" mat-button [mat-dialog-close]="mainText*data.prix" cdkFocusInitial><mat-icon aria-hidden="false" aria-label="Example check_box icon">check_box</mat-icon></button>
     </div>
+</div>
 </div>
 <style>
     .mat-button{

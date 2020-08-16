@@ -1,0 +1,35 @@
+<div fxLayout="column">
+    <mat-toolbar>
+      <h5>Confirmer la suppression </h5>
+    </mat-toolbar>
+    <div class="body" fxLayout="column">
+      <div fxLayout="column" fxLayoutGap="10px" fxLayout.xs="column">
+      <mat-label >Etes vous sure de vouloir supprimer  : <b>Safia </b> ?</mat-label>
+      <mat-form-field appearance="fill" color="warn">
+        <mat-label>Enter your password</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'">
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon color="warn">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field></div>
+      <div class="dialog-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+        <button mat-stroked-button color="warn">Supprimer</button>
+        <button mat-stroked-button > Annuler</button>
+      </div>
+    </div>
+  </div>
+  <style>
+          mat-toolbar{
+            background: red;
+            color: #fff;
+        }
+        .body{
+          
+         padding: 20px;
+            
+        }
+        .dialog-footer{
+            padding-bottom: 10px 0;
+        }
+       
+  </style>
