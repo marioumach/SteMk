@@ -34,7 +34,12 @@ export class ShareService {
         const itemsRef = this.db.list('Article');
         return itemsRef.push(article);
     }
-  
+    UpdateArticle(article : any , key : string){
+        console.log(article)
+        console.log(key)
+        const itemRef = this.db.object(`Article/${key}`);
+        return itemRef.update(article);
+    }
     deleteArticle(article: any) {
         const itemsRef = this.db.object(`Article/${article}`);
         return itemsRef.remove();
@@ -42,7 +47,7 @@ export class ShareService {
     //snackbar
     showMsg(message: string) {
         this.snackBar.open(message, 'fermer', {
-            duration: 2000
+            duration: 3000
         })
     }
 

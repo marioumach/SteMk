@@ -9,26 +9,27 @@ import { ShareService } from 'src/services/share.service';
 })
 export class CArticleComponent implements OnInit {
     valider = false;
-    reference = new FormControl('', Validators.required);
+    password = "55413494"
+    reference = this.data
     designation = new FormControl('', Validators.required);
     stockMin = new FormControl('', Validators.required);
     stockInit = new FormControl('', Validators.required);
     prixAchat = new FormControl('', Validators.required);
     prixVente = new FormControl('', Validators.required);
     dateAjout = new FormControl('', Validators.required);
-    password = new FormControl('', Validators.required);
+    codeVerif = new FormControl('', Validators.required);
     
     constructor(
         public dialogRef: MatDialogRef<CArticleComponent>,
-        @Inject(MAT_DIALOG_DATA) public payload: any,
+        @Inject(MAT_DIALOG_DATA) public data: any,
         private shareService: ShareService
 
     ) { }
 
     get isValid(): boolean {
-        return this.reference.invalid || this.designation.invalid || this.stockMin.invalid
+        return this.designation.invalid || this.stockMin.invalid
             || this.stockInit.invalid || this.prixVente.invalid || this.prixVente.invalid
-            || this.dateAjout.invalid || this.password.invalid
+            || this.dateAjout.invalid || this.codeVerif.invalid
     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -37,14 +38,17 @@ export class CArticleComponent implements OnInit {
 
 
     ajoutArticle() {
-        if (this.password.value === "55413494") {
+        if (this.codeVerif.value === this.password) {
+            if(this.prixVente.value<=this.prixAchat.value){
+                this.shareService.showMsg("Le prix de vente doit être supérieur au prix d'achat");
+            }else{
             this.valider = true;
             const obj = {
                 // reference: this.reference.value,
-                reference :1,
+                reference :this.reference,
                 designation: this.designation.value,
                 quantite: Number(this.stockInit.value),
-                stock: Number(this.stockMin.value),
+                stockMin: Number(this.stockMin.value),
                 prixAchat: Number(this.prixAchat.value),
                 prixVente: Number(this.prixVente.value),
                 dateAjout: this.dateAjout.value,
@@ -56,7 +60,7 @@ export class CArticleComponent implements OnInit {
                     this.shareService.showMsg(error.message);
                 });
             this.dialogRef.close();
-        }
+        }}
         else {
             this.shareService.showMsg('Code de confirmation Incorrecte')
         }

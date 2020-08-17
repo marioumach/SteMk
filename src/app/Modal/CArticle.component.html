@@ -9,7 +9,7 @@
             <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-label>Référence</mat-label>
-                    <input [formControl]="reference" matInput required>
+                    <input disabled [(ngModel)]="reference" matInput required>
                 </mat-form-field>
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-label>Désignation</mat-label>
@@ -43,7 +43,7 @@
                 </mat-form-field>
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-label>Code de Confirmation</mat-label>
-                    <input type="password" [formControl]="password" matInput required>
+                    <input type="password" [formControl]="codeVerif" matInput required>
                 </mat-form-field>
         </div>
     </div>

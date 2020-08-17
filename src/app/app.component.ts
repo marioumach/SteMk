@@ -47,7 +47,7 @@ export class AppComponent {
   title = 'SteMk';
   article: 'Safia';
   prix: 3300;
-  Qte: Number;
+  l: Number;
   Article_Caisse: string[] = ['N', 'Article', 'PU', 'Total'];
   Article_columns: string[] = ['reference', 'designation', 'stockMin', 'stockInit','prixAchat','prixVente','dateAjout','actions'];
   
@@ -72,6 +72,7 @@ export class AppComponent {
         console.log(element.key)
         this.Articles.push({ key :element.key ,...element.payload.val() as {}})
       })
+      this.l = this.Articles.length+1
       console.log(this.Articles)
       this.articles = new MatTableDataSource<any>(this.Articles);
     }
@@ -88,7 +89,6 @@ export class AppComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
-      this.Qte = Number(result);
       this.dataSource.push()
     });
   }
@@ -97,6 +97,7 @@ export class AppComponent {
     const dialogRef = this.dialog.open(CArticleComponent, {
       width: '600px',
       panelClass: 'app-full-bleed-dialog', 
+      data : this.l
 
     });
 
