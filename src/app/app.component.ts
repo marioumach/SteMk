@@ -7,6 +7,8 @@ import { ShareService } from 'src/services/share.service';
 import { ActivatedRoute } from '@angular/router';
 import { DArticleComponent } from './Modal/DArticle.component';
 import { CArticleComponent } from './Modal/CArticle.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { UArticleComponent } from './Modal/UArticle.component';
 
 
 export interface DialogData {
@@ -27,24 +29,14 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 ];
 export interface Article {
-  N: number;
-  Libelle: string;
-  Path: string;
-  Prix: number;
+  reference: string;
+  designation: string;
+  stockMin: number;
+  stockInit: number ;
+  prixAchat: number;
+  prixVente : number ;
+  dateAjout : Date ;
 }
-const Articles: Article[] = [
-  { N: 1, Libelle: 'Safia', Path: '', Prix: 3300 },
-  { N: 2, Libelle: 'Sabrine', Path: '', Prix: 3300 },
-  { N: 3, Libelle: 'Maroua', Path: '', Prix: 3000 },
-  { N: 4, Libelle: 'Cristaline', Path: '', Prix: 2800 },
-  { N: 5, Libelle: 'Jannet', Path: '', Prix: 3200 },
-  { N: 6, Libelle: 'Fourat', Path: '', Prix: 3300 },
-  { N: 7, Libelle: 'Melliti', Path: '', Prix: 2600 },
-  { N: 8, Libelle: 'Pristine', Path: '', Prix: 3600 },
-  { N: 9, Libelle: 'Denya', Path: '', Prix: 3700 },
-  { N: 10, Libelle: 'Primaqua', Path: '', Prix: 6000 }
-
-]
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -56,35 +48,32 @@ export class AppComponent {
   article: 'Safia';
   prix: 3300;
   Qte: Number;
-  displayedColumns: string[] = ['N', 'Article', 'PU', 'Total'];
-  displayedColumns1: string[] = ['N', 'Article', 'PU', 'Total', 'actions'];
-
+  Article_Caisse: string[] = ['N', 'Article', 'PU', 'Total'];
+  Article_columns: string[] = ['reference', 'designation', 'stockMin', 'stockInit','prixAchat','prixVente','dateAjout','actions'];
+  
   dataSource = ELEMENT_DATA;
-  articles = Articles;
 
-  ingredients: any[] = [];
-
-
-  constructor(public dialog: MatDialog, db: AngularFireDatabase, private route: ActivatedRoute,
-    private shareservice: ShareService) {
-    const a = db.list('Article').valueChanges()
-    console.log(a)
-    // this.shareservice.addArticle().then(() => {
-    //   this.shareservice.showMsg('Article ajouté')
-    // })
+  Articles : any[];
+  articles: MatTableDataSource<any>;;
 
 
-
+  constructor(public dialog: MatDialog,
+              db: AngularFireDatabase,
+              private route: ActivatedRoute,
+              private shareservice: ShareService) {
+                  const a = db.list('Article').valueChanges()
+                  console.log(a)
   }
   ngOnInit() {
     this.shareservice.getArticles().subscribe(data => {
       console.log(data)
-      this.ingredients = [];
+      this.Articles = [];
       data.forEach(element => {
         console.log(element.key)
-        this.ingredients.push({ ...element.payload.val() as {} })
+        this.Articles.push({ key :element.key ,...element.payload.val() as {}})
       })
-      console.log(this.ingredients)
+      console.log(this.Articles)
+      this.articles = new MatTableDataSource<any>(this.Articles);
     }
     )
   }
@@ -115,12 +104,25 @@ export class AppComponent {
       console.log('The dialog was closed', result);
     });
   }
+  // Etidter Article
+  openEditArticle(element : any): void{
+    const dialogRef = this.dialog.open(UArticleComponent, {
+      width: '600px',
+      panelClass: 'app-full-bleed-dialog', 
+      data:element
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+    });
+  }
   // Supprimer Article
-  openSupprimeArticle(): void {
+  openSupprimeArticle(element : any): void {
     const dialogRef = this.dialog.open(DArticleComponent, {
       width: '600px',
       panelClass: 'app-full-bleed-dialog', 
-
+      data:element
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -134,5 +136,9 @@ export class AppComponent {
   // Passer Operation de Vente
   passer() {
     window.print();
+  }
+  // Filtrer Articles
+  FiltrerArticles(filterValue: string) {
+    this.articles.filter = filterValue.trim().toLowerCase();
   }
 }

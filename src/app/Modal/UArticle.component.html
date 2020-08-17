@@ -1,0 +1,69 @@
+<div class="dialog" fxLayout="column">
+    <mat-toolbar>
+        <h5>Article</h5>
+    </mat-toolbar>
+    <div class="body" fxLayout="column">
+        <div style="width:100%" fxLayoutGap="50px">
+            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                <mat-form-field color="accent" class="w-100" appearance="outline">
+                    <mat-label>Référence</mat-label>
+                    <input [(ngModel)]="article.reference" matInput required>
+                </mat-form-field>
+                <mat-form-field color="accent" class="w-100" appearance="outline">
+                    <mat-label>Désignation</mat-label>
+                    <input [(ngModel)]="article.designation" matInput required>
+                </mat-form-field>
+            </div>
+            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                <mat-form-field color="accent" class="w-100" appearance="outline">
+                    <mat-label>Stock Minimal</mat-label>
+                    <input type="number" [(ngModel)]="article.stockMin" matInput required>
+                </mat-form-field>
+                <mat-form-field color="accent" class="w-100" appearance="outline">
+                    <mat-label>Stock Initial</mat-label>
+                    <input type="number" [(ngModel)]="article.stockInit" matInput required>
+                </mat-form-field>
+            </div>
+            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                <mat-form-field color="accent" class="w-100" appearance="outline">
+                    <mat-label>Prix d'Achat</mat-label>
+                    <input type="number" [(ngModel)]="article.prixAchat" matInput required>
+                </mat-form-field>
+                <mat-form-field color="accent" class="w-100" appearance="outline">
+                    <mat-label>Prix de Vente</mat-label>
+                    <input type="number" [(ngModel)]="article.prixVente" matInput required>
+                </mat-form-field>
+            </div>
+            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                <mat-form-field color="accent" class="w-100" appearance="outline">
+                    <mat-label>Date d'Ajout</mat-label>
+                    <input type="date" [(ngModel)]="article.dateAjout" matInput required>
+                </mat-form-field>
+                <mat-form-field color="accent" class="w-100" appearance="outline">
+                    <mat-label>Code de Confirmation</mat-label>
+                    <input type="password" [(ngModel)]="password" matInput required>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="dialog-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+            <button color="accent" mat-stroked-button  [disabled]="valider"
+                (click)="editArticle()">Enregistrer</button>
+            <button mat-stroked-button (click)="onNoClick()"> Annuler</button>
+        </div>
+    </div>
+</div>
+<style>
+    mat-toolbar {
+        background: orange;
+        color: #fff;
+    }
+    .edit{
+        background-color: orange;
+        color: #fff;
+    }
+
+    .body {
+        padding: 20px;
+
+    }
+</style>

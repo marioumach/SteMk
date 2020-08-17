@@ -4,10 +4,10 @@
     <div class="container-fluid w-100 h-100" style=" background-color:#757575 ;">
       <div class="main" fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
         <div class="row ">
-          <div class="col-sm-4 col-md-2" *ngFor="let article of articles">
+          <div class="col-sm-4 col-md-2" *ngFor="let article of Articles">
             <mat-card class="example-card">
               <mat-card-header>
-                <mat-card-title>{{article.Libelle}}</mat-card-title>
+                <mat-card-title>{{article.designation}}</mat-card-title>
               </mat-card-header>
 
               <mat-card-content>
@@ -17,7 +17,7 @@
                 </button>
               </mat-card-content>
               <mat-card-actions class="justify-content-center">
-                <button mat-button>{{article.Prix}}</button>
+                <button mat-button>{{article.prixVente}}</button>
               </mat-card-actions>
 
             </mat-card>
@@ -25,7 +25,8 @@
           </div>
 
         </div>
-        <div style=" width:100%; background-color:white ;" fxLayout="column" fxLayoutGap="15px"
+        <!-- width:100%; -->
+        <div style=" background-color:white ;" fxLayout="column" fxLayoutGap="15px"
           fxLayoutAlign="start center ">
 
           <cdk-table [dataSource]="dataSource" class="example-table">
@@ -53,8 +54,8 @@
               <cdk-cell *cdkCellDef="let element"> {{element.Total}} </cdk-cell>
             </ng-container>
 
-            <cdk-header-row class="example-header-row" *cdkHeaderRowDef="displayedColumns"></cdk-header-row>
-            <cdk-row class="example-row" *cdkRowDef="let row; columns: displayedColumns;"></cdk-row>
+            <cdk-header-row class="example-header-row" *cdkHeaderRowDef="Article_Caisse"></cdk-header-row>
+            <cdk-row class="example-row" *cdkRowDef="let row; columns: Article_Caisse;"></cdk-row>
           </cdk-table>
 
           <div fxLayout="row" fxLayoutGap="100px" fxLayoutAlign="space-around start">
@@ -92,30 +93,44 @@
         </div>
       </div>
       <div class="example-container">
-        <cdk-table [dataSource]="dataSource" class="example-table"
+        <cdk-table [dataSource]="articles" class="example-table"
           class="mat-elevation-z8 table table-responsive-md table-striped ">
           <!-- Position Column -->
-          <ng-container cdkColumnDef="N">
+          <ng-container cdkColumnDef="reference">
             <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Reference </cdk-header-cell>
-            <cdk-cell *cdkCellDef="let element"> {{element.N}} </cdk-cell>
+            <cdk-cell *cdkCellDef="let element"> {{element.reference}} </cdk-cell>
           </ng-container>
 
           <!-- Article Column -->
-          <ng-container cdkColumnDef="Article">
+          <ng-container cdkColumnDef="designation">
             <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Designation </cdk-header-cell>
-            <cdk-cell *cdkCellDef="let element"> {{element.Article}} </cdk-cell>
+            <cdk-cell *cdkCellDef="let element"> {{element.designation}} </cdk-cell>
           </ng-container>
 
           <!-- PU Column -->
-          <ng-container cdkColumnDef="PU">
-            <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Etat du Stock </cdk-header-cell>
-            <cdk-cell *cdkCellDef="let element"> {{element.PU}} </cdk-cell>
+          <ng-container cdkColumnDef="prixVente">
+            <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Prix de vente </cdk-header-cell>
+            <cdk-cell *cdkCellDef="let element"> {{element.prixVente}} </cdk-cell>
           </ng-container>
-
+           <!-- PU Column -->
+           <ng-container cdkColumnDef="prixAchat">
+            <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Prix d'achat </cdk-header-cell>
+            <cdk-cell *cdkCellDef="let element"> {{element.prixAchat}} </cdk-cell>
+          </ng-container>
+           <!-- PU Column -->
+           <ng-container cdkColumnDef="stockMin">
+            <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Stock Minimal </cdk-header-cell>
+            <cdk-cell *cdkCellDef="let element"> {{element.stock}} </cdk-cell>
+          </ng-container>
+     <!-- PU Column -->
+     <ng-container cdkColumnDef="stockInit">
+      <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Quantite </cdk-header-cell>
+      <cdk-cell *cdkCellDef="let element"> {{element.quantite}} </cdk-cell>
+    </ng-container>
           <!-- Total Column -->
-          <ng-container cdkColumnDef="Total">
-            <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Quantité </cdk-header-cell>
-            <cdk-cell *cdkCellDef="let element"> {{element.Total}} </cdk-cell>
+          <ng-container cdkColumnDef="dateAjout">
+            <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Date d'Ajout </cdk-header-cell>
+            <cdk-cell *cdkCellDef="let element"> {{element.dateAjout}} </cdk-cell>
           </ng-container>
 
           <ng-container cdkColumnDef="actions">
@@ -152,101 +167,112 @@
 
           </ng-container>
 
-          <cdk-header-row class="example-header-row" *cdkHeaderRowDef="displayedColumns1"></cdk-header-row>
-          <cdk-row class="example-row" *cdkRowDef="let row; columns: displayedColumns1;"></cdk-row>
+          <cdk-header-row class="example-header-row" *cdkHeaderRowDef="Article_columns"></cdk-header-row>
+          <cdk-row class="example-row" *cdkRowDef="let row; columns: Article_columns;"></cdk-row>
 
         </cdk-table>
       </div>
     </div>
   </mat-tab>
 
+  <!-- Articles -->
   <mat-tab label="Articles"> <div class="container-fluid w-100 h-100">
     <div class="w-100" fxLayout="column" fxLayoutAlign="space-around start">
 
       <div class="actions w-100" fxLayout="row" fxLayoutAlign="space-between center">
         <div>
           <mat-form-field appearance="outline" class="w-100">
-            <!-- (keyup)="applyFilter($event.target.value)" -->
-            <input matInput autocomplete="off" placeholder="Filtrer">
+            <input matInput autocomplete="off" (keyup)="FiltrerArticles($event.target.value)" placeholder="Filtrer">
           </mat-form-field>
         </div>
-        <!-- (click)="openCingredient()"  -->
         <div style="cursor:pointer;" fxLayout="row" fxLayoutAlign="center" (click)="openAjoutArticle()">
 
           <mat-icon color="primary" style="font-size: 21px;">add_to_photos</mat-icon>
           <span style="color: #3f51b5;" [fxHide.xs]="true">Ajouter</span>
         </div>
-        <!-- <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" [ngStyle.xs]="{'padding.px': 10}">
-   
-       
-      </div> -->
       </div>
     </div>
+
+    <!-- Tableaux d'Articles -->
     <div class="example-container">
-      <cdk-table [dataSource]="dataSource" class="example-table"
-        class="mat-elevation-z8 table table-responsive-md table-striped ">
-        <!-- Position Column -->
-        <ng-container cdkColumnDef="N">
-          <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Reference </cdk-header-cell>
-          <cdk-cell *cdkCellDef="let element"> {{element.N}} </cdk-cell>
-        </ng-container>
+      <cdk-table [dataSource]="articles" class="example-table"
+      class="mat-elevation-z8 table table-responsive-md table-striped ">
+      <!-- Position Column -->
+      <ng-container cdkColumnDef="reference">
+        <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Reference </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let element"> {{element.reference}} </cdk-cell>
+      </ng-container>
 
-        <!-- Article Column -->
-        <ng-container cdkColumnDef="Article">
-          <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Designation </cdk-header-cell>
-          <cdk-cell *cdkCellDef="let element"> {{element.Article}} </cdk-cell>
-        </ng-container>
+      <!-- Article Column -->
+      <ng-container cdkColumnDef="designation">
+        <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Designation </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let element"> {{element.designation}} </cdk-cell>
+      </ng-container>
 
-        <!-- PU Column -->
-        <ng-container cdkColumnDef="PU">
-          <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Etat du Stock </cdk-header-cell>
-          <cdk-cell *cdkCellDef="let element"> {{element.PU}} </cdk-cell>
-        </ng-container>
+      <!-- PU Column -->
+      <ng-container cdkColumnDef="prixVente">
+        <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Prix de vente </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let element"> {{element.prixVente}} </cdk-cell>
+      </ng-container>
+       <!-- PU Column -->
+       <ng-container cdkColumnDef="prixAchat">
+        <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Prix d'achat </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let element"> {{element.prixAchat}} </cdk-cell>
+      </ng-container>
+       <!-- PU Column -->
+       <ng-container cdkColumnDef="stockMin">
+        <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Stock Minimal </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let element"> {{element.stock}} </cdk-cell>
+      </ng-container>
+ <!-- PU Column -->
+ <ng-container cdkColumnDef="stockInit">
+  <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Quantite </cdk-header-cell>
+  <cdk-cell *cdkCellDef="let element"> {{element.quantite}} </cdk-cell>
+</ng-container>
+      <!-- Total Column -->
+      <ng-container cdkColumnDef="dateAjout">
+        <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Date d'Ajout </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let element"> {{element.dateAjout}} </cdk-cell>
+      </ng-container>
 
-        <!-- Total Column -->
-        <ng-container cdkColumnDef="Total">
-          <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Quantité </cdk-header-cell>
-          <cdk-cell *cdkCellDef="let element"> {{element.Total}} </cdk-cell>
-        </ng-container>
-
-        <ng-container cdkColumnDef="actions">
-          <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef fxLayout="row" fxLayoutAlign="space-between">
-            <span>Modifier</span>
-            <span>Supprimer</span>
-          </cdk-header-cell>
-          <cdk-cell *cdkCellDef="let element" fxLayout="row" fxLayoutAlign="space-between">
-            <button mat-icon-button style="color: orange;">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button style="color: red;" (click)="openSupprimeArticle()">
-              <mat-icon>delete</mat-icon>
-            </button>
-            <!-- (click)="openEdit(element)" -->
-            <!-- (click)="openSupprimeArticle(element)" -->
-          </cdk-cell>
+      <ng-container cdkColumnDef="actions">
+        <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef fxLayout="row" fxLayoutAlign="space-between">
+          <span>Modifier</span>
+          <span>Supprimer</span>
+        </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let element" fxLayout="row" fxLayoutAlign="space-between">
+          <button mat-icon-button style="color: orange;" (click)="openEditArticle(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button style="color: red;" (click)="openSupprimeArticle(element)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <!-- (click)="openEdit(element)" -->
+          <!-- (click)="openSupprimeArticle(element)" -->
+        </cdk-cell>
 
 
 
-        </ng-container>
+      </ng-container>
 
-        <ng-container cdkColumnDef="Supprimer">
-          <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Supprimer </cdk-header-cell>
-          <cdk-cell *cdkCellDef="let element" fxLayout="column" fxLayoutAlign="center start">
-            <button mat-icon-button style="color: #506169;">
-              <mat-icon>delete</mat-icon>
-            </button>
-            <!-- (click)="openEdit(element)" -->
-            <!-- (click)="openSupprimeArticle(element)" -->
-          </cdk-cell>
+      <ng-container cdkColumnDef="Supprimer">
+        <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Supprimer </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let element" fxLayout="column" fxLayoutAlign="center start">
+          <button mat-icon-button style="color: #506169;">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <!-- (click)="openEdit(element)" -->
+          <!-- (click)="openSupprimeArticle(element)" -->
+        </cdk-cell>
 
 
 
-        </ng-container>
+      </ng-container>
 
-        <cdk-header-row class="example-header-row" *cdkHeaderRowDef="displayedColumns1"></cdk-header-row>
-        <cdk-row class="example-row" *cdkRowDef="let row; columns: displayedColumns1;"></cdk-row>
+      <cdk-header-row class="example-header-row" *cdkHeaderRowDef="Article_columns"></cdk-header-row>
+      <cdk-row class="example-row" *cdkRowDef="let row; columns: Article_columns;"></cdk-row>
 
-      </cdk-table>
+    </cdk-table>
     </div>
   </div></mat-tab>
   <mat-tab label="Vente du jour">Content 3</mat-tab>

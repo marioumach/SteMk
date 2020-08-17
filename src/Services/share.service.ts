@@ -8,7 +8,8 @@ import * as firebase from 'firebase';
 import { take } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class ShareService {
-    a : any = {Reference : 'EMPrimaqua11000', Designation : 'PrimaAqua'}
+
+    a: any = { Reference: 'EMPrimaqua11000', Designation: 'PrimaAqua' }
 
     constructor(private db: AngularFireDatabase,
         private snackBar: MatSnackBar,
@@ -23,20 +24,26 @@ export class ShareService {
 
             })
         })
-    }
-    addArticle(article : any){
-        const itemsRef = this.db.list('Article');
-        return itemsRef.push(article);
-    }
+    } 
+    // CRUD Article
     getArticles() {
         const ref = this.db.list('Article').snapshotChanges();
         return ref;
     }
-     //snackbar
-  showMsg(message: string) {
-    this.snackBar.open(message, 'fermer', {
-      duration: 2000
-    })
-  }
+    addArticle(article: any) {
+        const itemsRef = this.db.list('Article');
+        return itemsRef.push(article);
+    }
+  
+    deleteArticle(article: any) {
+        const itemsRef = this.db.object(`Article/${article}`);
+        return itemsRef.remove();
+    }
+    //snackbar
+    showMsg(message: string) {
+        this.snackBar.open(message, 'fermer', {
+            duration: 2000
+        })
+    }
 
 }
