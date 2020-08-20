@@ -9,6 +9,7 @@ import { DArticleComponent } from './Modal/DArticle.component';
 import { CArticleComponent } from './Modal/CArticle.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { UArticleComponent } from './Modal/UArticle.component';
+import { FormControl, Validators } from '@angular/forms';
 
 
 export interface DialogData {
@@ -45,25 +46,39 @@ export interface Article {
 export class AppComponent {
   items: Observable<any[]>;
   title = 'SteMk';
-  article: 'Safia';
   prix: 3300;
   l: Number;
   Article_Caisse: string[] = ['N', 'Article', 'PU', 'Total'];
   Article_columns: string[] = ['reference', 'designation', 'stockMin', 'stockInit','prixAchat','prixVente','dateAjout','actions'];
-  
+  Stock_columns:string[] = ['reference' , 'designation' , 'date' , 'operation' , 'acteur' , 'quantité' , 'prix' ,'valeur', 'actions']
+  stock:any;
   dataSource = ELEMENT_DATA;
 
   Articles : any[];
-  articles: MatTableDataSource<any>;;
+  Mouvements : any[];
+
+  articles: MatTableDataSource<any>;
+  mouvements: MatTableDataSource<any>;
+
+  operation= new FormControl('Entrée',Validators.required);
+  acteur = new FormControl('', Validators.required);
+  article = new FormControl('', Validators.required);
+  date= new FormControl('', Validators.required);
+  quantite = new FormControl('', Validators.required);
 
 
   constructor(public dialog: MatDialog,
               db: AngularFireDatabase,
               private route: ActivatedRoute,
               private shareservice: ShareService) {
-                  const a = db.list('Article').valueChanges()
-                  console.log(a)
-  }
+           
+
+
+               }
+               
+                Nombre(total)  : any{
+                  return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+                };
   ngOnInit() {
     this.shareservice.getArticles().subscribe(data => {
       console.log(data)
@@ -75,8 +90,19 @@ export class AppComponent {
       this.l = this.Articles.length+1
       console.log(this.Articles)
       this.articles = new MatTableDataSource<any>(this.Articles);
-    }
-    )
+    })
+    this.shareservice.getMouvements().subscribe(data => {
+      console.log(data)
+      this.Mouvements = [];
+      data.forEach(element => {
+        console.log(element.key)
+        this.Mouvements.push({ key :element.key ,...element.payload.val() as {}})
+        const a =this.shareservice.getArticle(this.Mouvements[this.Mouvements.length-1].article)
+        console.log(a)
+      })
+      console.log(this.Mouvements)
+      this.mouvements = new MatTableDataSource<any>(this.Mouvements);
+    })
   }
 
 //Calculatrice
@@ -130,6 +156,28 @@ export class AppComponent {
       console.log('The dialog was closed', result);
     });
   }
+  //Verificcation Stock
+  get isValidInventaire () : boolean{
+    return this.operation.invalid || this.acteur.invalid || this.article.invalid || this.date.invalid || this.quantite.invalid
+  }
+  AjoutMouvement(){
+    if (this.isValidInventaire === false){
+            const obj = {
+                operation :this.operation.value,
+                acteur: this.acteur.value,
+                article: this.article.value,
+                date: this.date.value,
+                quantite: this.quantite.value,
+                prix : this.getArticle(this.article.value).prixAchat
+            }
+            
+            this.shareservice.addMouvement(obj).then(() => {
+                this.shareservice.showMsg("Mouvement ajouté avec succès");
+            })
+                .catch(error => {
+                    this.shareservice.showMsg(error.message);
+                });
+    }}
   // Annuler Operation de vente
   annuler() {
     this.dataSource = [];
@@ -137,6 +185,11 @@ export class AppComponent {
   // Passer Operation de Vente
   passer() {
     window.print();
+  }
+  //Chercher un Article par sa clé
+  getArticle (key: string) : any{
+    const index = this.Articles.map(e => e.key).indexOf(key);   
+     return this.Articles[index];
   }
   // Filtrer Articles
   FiltrerArticles(filterValue: string) {

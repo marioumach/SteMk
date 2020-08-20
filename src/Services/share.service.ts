@@ -9,20 +9,21 @@ import { take } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class ShareService {
 
-    a: any = { Reference: 'EMPrimaqua11000', Designation: 'PrimaAqua' }
-
     constructor(private db: AngularFireDatabase,
         private snackBar: MatSnackBar,
         private http: HttpClient) { }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         return new Promise((resolve, reject) => {
             const articles = this.getArticles().subscribe((articles) => {
+                const mouvements = this.getArticles().subscribe((mouvements) => {
                 const obj = {
-                    articles: articles
+                    articles: articles,
+                    mouvements:mouvements
                 };
                 resolve(obj);
 
             })
+        })
         })
     } 
     // CRUD Article
@@ -35,14 +36,23 @@ export class ShareService {
         return itemsRef.push(article);
     }
     UpdateArticle(article : any , key : string){
-        console.log(article)
-        console.log(key)
         const itemRef = this.db.object(`Article/${key}`);
         return itemRef.update(article);
     }
     deleteArticle(article: any) {
         const itemsRef = this.db.object(`Article/${article}`);
         return itemsRef.remove();
+    }
+    getArticle(key : string){
+        return this.db.object(`Article/${key}`).snapshotChanges();
+    }
+    getMouvements() {
+        const ref = this.db.list('Mouvement').snapshotChanges();
+        return ref;
+    }
+    addMouvement(mouvement : any) {
+        const itemsRef = this.db.list('Mouvement');
+        return itemsRef.push(mouvement);
     }
     //snackbar
     showMsg(message: string) {
