@@ -1,8 +1,8 @@
-<div  (keyup)="onTouche($event)">
+<div (keyup)="onTouche($event)">
 <div fxLayout="row" fxLayoutAlign="space-between start">
     <h1 mat-dialog-title>
 
-        <span>{{data.article}}</span> 
+        <span>{{article.designation}}</span> 
        
   </h1>
   <button mat-icon-button (click)="onNoClick()">
@@ -14,17 +14,17 @@
 
 <h1 mat-dialog-title>
 
-    <span>Qte :</span> {{mainText}}
+    <span>Qte :</span> <input #myInput type="number"  matInput autocomplete="off" [(ngModel)]="mainText" style="width: 75px;">
+    {{ myInput.focus() }}
+</h1>
+<h1 mat-dialog-title>
+
+    <span>Prix :</span><input matInput type="number" autocomplete="off" [(ngModel)]="article.prixVente" style="width: 75px;">
    
 </h1>
 <h1 mat-dialog-title>
 
-    <span>Prix :</span><input matInput [(ngModel)]="data.prix" style="width: 75px;">
-   
-</h1>
-<h1 mat-dialog-title>
-
-    <span>Total :</span>{{mainText*data.prix}}
+    <span>Total :</span>{{mainText*article.prixVente}}
    
 </h1>
 

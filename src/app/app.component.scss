@@ -1,7 +1,8 @@
 mat-card{
-    margin: 15px 0px;
+    margin-top: 15px;
+    padding: 15px 5px 5px 5px;
 }
-.col-md-2{
+.article{
 padding-right: 0px !important;
 }
 .example-table {
@@ -32,3 +33,7 @@ padding-right: 0px !important;
     font-weight: bold;
     color: rgba(0, 0, 0, 0.54);
   }
+  body{
+    background-color:#757575 ;
+  }
+

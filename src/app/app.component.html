@@ -1,32 +1,27 @@
-<mat-tab-group [backgroundColor]="'primary'">
+<mat-tab-group [backgroundColor]="'primary'" class="h-100">
   <!-- Caisse -->
-  <mat-tab label="Caisse">
+  <mat-tab label="Caisse" class="h-100" >
     <div class="container-fluid w-100 h-100" style=" background-color:#757575 ;">
-      <div class="main" fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
-        <div class="row ">
-          <div class="col-sm-4 col-md-2" *ngFor="let article of Articles">
+      <div class="main row" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around start">
+        <div class="col-sm-4 col-md-9 row ">
+          <div class="col-sm-4 col-md-2 article" *ngFor="let article of Articles">
             <mat-card class="example-card">
-              <mat-card-header>
-                <mat-card-title>{{article.designation}}</mat-card-title>
+              <mat-card-header >
+               <p style=" margin: 0 !important;"> {{article.designation}}</p>
+               <span class="notify-badge">{{article.prixVente}}</span>
               </mat-card-header>
-
-              <mat-card-content>
+              <mat-card-content  class="item">
                 <button mat-button (click)="openCalculatrice(article)">
-                  <img mat-card-image src="../assets/images/Safia 1,5L.jpg" alt="Photo of a Shiba Inu"
-                    style="margin-top: 0;">
+                  <img mat-card-image [src]="article.image==''?'./assets/images/Bouteille.png':article.image" 
+                    style="margin-top: 0;" height="100px">
                 </button>
               </mat-card-content>
-              <mat-card-actions class="justify-content-center">
-                {{article.prixVente}}
-              </mat-card-actions>
-
             </mat-card>
-
           </div>
-
         </div>
         <!-- width:100%; -->
-        <div style=" background-color:white ;" fxLayout="column" fxLayoutGap="15px" fxLayoutAlign="start center ">
+        <div class="col-md-3" style=" background-color:white ;
+        height: 100%;  border-radius: 5px; margin-top: 15px;" fxLayout="column" fxLayoutGap="15px" fxLayoutAlign="start center">
 
           <cdk-table [dataSource]="dataSource" class="example-table">
             <!-- Position Column -->
@@ -57,7 +52,7 @@
             <cdk-row class="example-row" *cdkRowDef="let row; columns: Article_Caisse;"></cdk-row>
           </cdk-table>
 
-          <div fxLayout="row" fxLayoutGap="100px" fxLayoutAlign="space-around start">
+          <div class="w-100" style="padding: 10px !important;" fxLayout="row" fxLayoutAlign="space-between start">
             <button mat-raised-button (click)="annuler()" class="operation">Annuler</button>
             <button mat-raised-button color="primary" (click)="passer()" class="operation">Passer</button>
           </div>
@@ -338,4 +333,21 @@
   .example-row {
     height: 40px;
   }
+  .item {
+    position:relative;
+    padding-top:5px;
+    display:inline-block;
+}
+.notify-badge{
+    position: absolute;
+    right:30%;
+    margin-top:-20px;
+    top:10px;
+    background:#3f51b5;
+    text-align: center;
+    border-radius: 30px 30px 30px 30px;
+    color:white;
+    padding:0px 15px;
+}
+
 </style>

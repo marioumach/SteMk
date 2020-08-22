@@ -23,7 +23,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireMessagingModule } from "@angular/fire/messaging";
-import { AngularFireStorageModule  } from "@angular/fire/storage";
+import { AngularFireStorageModule,BUCKET  } from "@angular/fire/storage";
 import { environment } from 'src/environments/environment';
 
 //Services
@@ -55,7 +55,7 @@ import { ShareService } from "src/services/share.service";
     HttpClientModule,
 
   ],
-  providers: [ShareService],
+  providers: [ShareService, { provide: BUCKET, useValue: 'stemk-4bf9d.appspot.com' } ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,12 +6,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import * as firebase from 'firebase';
 import { take } from 'rxjs/operators';
+import { AngularFireStorage } from '@angular/fire/storage';
 @Injectable({ providedIn: 'root' })
 export class ShareService {
 
     constructor(private db: AngularFireDatabase,
         private snackBar: MatSnackBar,
-        private http: HttpClient) { }
+        private http: HttpClient,
+        private storage: AngularFireStorage) { }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         return new Promise((resolve, reject) => {
             const articles = this.getArticles().subscribe((articles) => {
@@ -26,6 +28,35 @@ export class ShareService {
         })
         })
     } 
+    articleImg$: BehaviorSubject<string> = new BehaviorSubject<string>("./assets/images/Bouteille.png");
+    getArticleImage() {
+        return this.articleImg$.asObservable();
+      }
+    setArticleImage(croppedFile: string){
+        this.articleImg$.next(croppedFile);
+    }
+    // Set Image
+    uploadArticleImage(file, key: string) {
+        console.log(key)
+        const filePath ='Article/'+key+'.png' 
+        console.log(filePath)
+        const fileRef = this.storage.ref(filePath);
+        console.log(fileRef)
+        this.storage.upload(filePath, file).then(() => {
+            fileRef.getDownloadURL().subscribe((url: string) => {
+                console.log(url)
+            this.updateArticleImage(key, url).then(() => {
+              this.showMsg('Image Sauvegardée avec succès')
+            }).catch((error)=>{
+                this.showMsg(error)
+            })
+          })
+        });
+      }
+    updateArticleImage(uid: string, url: string) {
+        const itemref = this.db.object('Article/' + uid);
+        return itemref.update({ image: url});
+      }
     // CRUD Article
     getArticles() {
         const ref = this.db.list('Article').snapshotChanges();

@@ -19,3 +19,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .app-full-bleed-dialog .mat-dialog-container {
     padding: 0 !important;
   }
+  .mat-tab-body-wrapper {
+    height: 100% !important;
+  }

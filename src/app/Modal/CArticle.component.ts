@@ -6,6 +6,7 @@ import { ShareService } from 'src/services/share.service';
 @Component({
     selector: 'app-CArticle',
     templateUrl: './CArticle.component.html',
+    styleUrls:['./CArticle.component.scss']
 })
 export class CArticleComponent implements OnInit {
     valider = false;
@@ -18,13 +19,21 @@ export class CArticleComponent implements OnInit {
     prixVente = new FormControl('', Validators.required);
     dateAjout = new FormControl('', Validators.required);
     codeVerif = new FormControl('', Validators.required);
-    
+    selectedItem: string = '';
+    articleImage: any ;
+ 
     constructor(
         public dialogRef: MatDialogRef<CArticleComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private shareService: ShareService
 
     ) { }
+
+    onChange(evt) {
+        this.articleImage = evt.target.files[0];
+        console.log(this.articleImage)
+    }
+
 
     get isValid(): boolean {
         return this.designation.invalid || this.stockMin.invalid
@@ -53,7 +62,8 @@ export class CArticleComponent implements OnInit {
                 prixVente: Number(this.prixVente.value),
                 dateAjout: this.dateAjout.value,
             }
-            this.shareService.addArticle(obj).then(() => {
+            this.shareService.addArticle(obj).then((data) => {
+                this.updateArticleImage(data.key)
                 this.shareService.showMsg("Article ajouté avec succès");
             })
                 .catch(error => {
@@ -67,5 +77,13 @@ export class CArticleComponent implements OnInit {
 
     }
 
-    ngOnInit(): void { }
-}
+    ngOnInit(): void {
+        this.shareService.getArticleImage().subscribe((croppedImage) => {
+            this.articleImage = croppedImage;
+          })
+     }
+     
+     updateArticleImage(key : any){
+        this.shareService.uploadArticleImage(this.articleImage ,key);  
+      }
+    }

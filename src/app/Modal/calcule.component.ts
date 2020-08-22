@@ -10,27 +10,21 @@ export interface DialogData {
   templateUrl: './calcule.component.html',
 })
 export class CalculeComponent {
+  
   mainText = 0;
   str: String;
+   article  : any
 
   constructor(
     public dialogRef: MatDialogRef<CalculeComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+      this.article = data.article
+      console.log(this.article)
+     }
 
   onTouche(event: KeyboardEvent): void {
     var e = event.key;
-    console.log(e)
-    if (!isNaN(Number(e))) {
-      this.pressKey(e)
-    }
-    else if (e === "Backspace") {
-      console.log('backspaceeee')
-      this.onDelete()
-    }
-    else if (e === "Enter") {
-      this.onDelete()
-
-      console.log('Enterrrr')
+if (e === "Enter") {
       this.onNoClick()
     }
   }

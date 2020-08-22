@@ -103,6 +103,7 @@ export class AppComponent {
       console.log(this.Mouvements)
       this.mouvements = new MatTableDataSource<any>(this.Mouvements);
     })
+   
   }
 
 //Calculatrice
@@ -110,7 +111,7 @@ export class AppComponent {
     console.log(article)
     const dialogRef = this.dialog.open(CalculeComponent, {
       width: '600px',
-      data: { prix: '3300', article: 'Safia' }
+      data: { article : article}
     });
 
     dialogRef.afterClosed().subscribe(result => {

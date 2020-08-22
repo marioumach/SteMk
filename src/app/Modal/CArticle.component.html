@@ -1,6 +1,13 @@
 <div class="dialog" fxLayout="column">
-    <mat-toolbar>
+    <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
         <h5>Article</h5>
+
+        <button mat-stroked-button (click)="file.click()">
+            <mat-icon>add_a_photo</mat-icon>
+            <input (change)="onChange($event)" visbility="hidden" #file type="file" name="file" accept="image/*">
+
+        </button>
+
     </mat-toolbar>
     <div class="body" fxLayout="column">
 
@@ -45,13 +52,15 @@
                     <mat-label>Code de Confirmation</mat-label>
                     <input type="password" [formControl]="codeVerif" matInput required>
                 </mat-form-field>
+            </div>
+        </div>
+
+        <div class="dialog-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+            <button mat-stroked-button color="primary" [disabled]="isValid"
+                (click)="ajoutArticle()">Enregistrer</button>
+            <button mat-stroked-button (click)="onNoClick()"> Annuler</button>
         </div>
     </div>
-
-<div class="dialog-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
-    <button mat-stroked-button color="primary" [disabled]="isValid" (click)="ajoutArticle()">Enregistrer</button>
-    <button mat-stroked-button (click)="onNoClick()"> Annuler</button>
-</div></div>
 </div>
 <style>
     mat-toolbar {
@@ -62,5 +71,14 @@
     .body {
         padding: 20px;
 
+    }
+
+    input[type="file"] {
+        display: inline-block;
+        opacity: 0;
+        position: absolute;
+        width: 0;
+        height: 0;
+        cursor: pointer;
     }
 </style>
