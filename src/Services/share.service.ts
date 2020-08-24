@@ -57,7 +57,15 @@ export class ShareService {
         const itemref = this.db.object('Article/' + uid);
         return itemref.update({ image: url});
       }
+    updateArticleQte(uid: string, qte : number) {
+        const itemref = this.db.object('Article/' + uid);
+        return itemref.update({ quantite: qte});
+      }
     // CRUD Article
+    getActiveArticles(){
+          const ref= this.db.list('Article', ref => ref.orderByChild('active').equalTo(true)).snapshotChanges();
+          return ref
+    }
     getArticles() {
         const ref = this.db.list('Article').snapshotChanges();
         return ref;
@@ -72,11 +80,12 @@ export class ShareService {
     }
     deleteArticle(article: any) {
         const itemsRef = this.db.object(`Article/${article}`);
-        return itemsRef.remove();
+        return itemsRef.update({active : false});
     }
     getArticle(key : string){
         return this.db.object(`Article/${key}`).snapshotChanges();
     }
+
     getMouvements() {
         const ref = this.db.list('Mouvement').snapshotChanges();
         return ref;
@@ -84,6 +93,10 @@ export class ShareService {
     addMouvement(mouvement : any) {
         const itemsRef = this.db.list('Mouvement');
         return itemsRef.push(mouvement);
+    }
+    deleteMouvement(mouvement: any) {
+        const itemsRef = this.db.object(`Mouvement/${mouvement}`);
+        return itemsRef.remove();
     }
     //snackbar
     showMsg(message: string) {

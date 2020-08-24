@@ -5,7 +5,7 @@
         <span>{{article.designation}}</span> 
        
   </h1>
-  <button mat-icon-button (click)="onNoClick()">
+  <button mat-icon-button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
 
@@ -14,17 +14,17 @@
 
 <h1 mat-dialog-title>
 
-    <span>Qte :</span> <input #myInput type="number"  matInput autocomplete="off" [(ngModel)]="mainText" style="width: 75px;">
-    {{ myInput.focus() }}
+    <span>Qte :</span> <input  type="number"  matInput autocomplete="off" [(ngModel)]="mainText" style="width: 75px;">
+  
 </h1>
 <h1 mat-dialog-title>
 
-    <span>Prix :</span><input matInput type="number" autocomplete="off" [(ngModel)]="article.prixVente" style="width: 75px;">
+    <span>Prix :</span><input matInput type="number" autocomplete="off" [(ngModel)]="PU" style="width: 75px;">
    
 </h1>
 <h1 mat-dialog-title>
 
-    <span>Total :</span>{{mainText*article.prixVente}}
+    <span>Total :</span>{{mainText*this.PU}}
    
 </h1>
 
@@ -59,7 +59,7 @@
     </div>
     <div class="col-md-4"><button class="w-100"  mat-button (click)="pressKey('0')">0</button>
     </div>
-    <div class="col-md-4"><button  class="w-100" mat-button [mat-dialog-close]="mainText*data.prix" cdkFocusInitial><mat-icon aria-hidden="false" aria-label="Example check_box icon">check_box</mat-icon></button>
+    <div class="col-md-4"><button  class="w-100" mat-button (click)="passer()" cdkFocusInitial><mat-icon aria-hidden="false" aria-label="Example check_box icon">check_box</mat-icon></button>
     </div>
 </div>
 </div>

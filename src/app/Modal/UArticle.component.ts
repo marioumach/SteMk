@@ -25,19 +25,29 @@ export class UArticleComponent implements OnInit {
             this.article.prixAchat=data.prixAchat;
             this.article.prixVente=data.prixVente;
             this.article.dateAjout=data.dateAjout;
+            this.article.image = data.image
            this.key = data.key
 
 
 
         }
+        articleImage: any ;
 
+        onChange(evt) {
+            this.articleImage = evt.target.files[0];
+            console.log(this.articleImage)
+        }
     ngOnInit(): void { }
     onNoClick(): void {
         this.dialogRef.close();
     }
     editArticle():void{
         if (this.codeVerif === this.password) {
+            if(this.article.prixVente<=this.article.prixAchat){
+                this.shareService.showMsg("Le prix de vente doit être supérieur au prix d'achat");
+            }else{
             this.valider = true;
+            this
             
             const obj = {
                 // reference: this.reference.value,
@@ -47,20 +57,27 @@ export class UArticleComponent implements OnInit {
                 stockMin: Number(this.article.stockMin),
                 prixAchat: Number(this.article.prixAchat),
                 prixVente: Number(this.article.prixVente),
-                dateAjout: this.article.dateAjout
+                dateAjout: this.article.dateAjout,
+                image : this.article.image
             }
             this.shareService.UpdateArticle(obj,this.key).then(() => {
+                this.updateArticleImage(this.article.key)
+
                 this.shareService.showMsg("Article modifié avec succès");
             })
                 .catch(error => {
                     this.shareService.showMsg(error.message);
                 });
             this.dialogRef.close();
-        }
+        }}
         else {
             this.shareService.showMsg('Code de confirmation Incorrecte')
         }
 
 
     }
+    updateArticleImage(key : any){
+        if (this.articleImage){
+       this.shareService.uploadArticleImage(this.articleImage ,key); } 
+     }
 }

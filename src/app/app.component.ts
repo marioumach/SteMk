@@ -10,6 +10,7 @@ import { CArticleComponent } from './Modal/CArticle.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { UArticleComponent } from './Modal/UArticle.component';
 import { FormControl, Validators } from '@angular/forms';
+import { DMouvementComponent } from './Modal/DMouvement.component';
 
 
 export interface DialogData {
@@ -33,10 +34,10 @@ export interface Article {
   reference: string;
   designation: string;
   stockMin: number;
-  stockInit: number ;
+  stockInit: number;
   prixAchat: number;
-  prixVente : number ;
-  dateAjout : Date ;
+  prixVente: number;
+  dateAjout: Date;
 }
 @Component({
   selector: 'app-root',
@@ -48,83 +49,102 @@ export class AppComponent {
   title = 'SteMk';
   prix: 3300;
   l: Number;
-  Article_Caisse: string[] = ['N', 'Article', 'PU', 'Total'];
-  Article_columns: string[] = ['reference', 'designation', 'stockMin', 'stockInit','prixAchat','prixVente','dateAjout','actions'];
-  Stock_columns:string[] = ['reference' , 'designation' , 'date' , 'operation' , 'acteur' , 'quantité' , 'prix' ,'valeur', 'actions']
-  stock:any;
-  dataSource = ELEMENT_DATA;
+  Article_Caisse: string[] = ['action', 'Qte', 'Article', 'PU', 'Total'];
+  Article_columns: string[] = ['reference', 'designation', 'stockMin', 'stockInit', 'prixAchat', 'prixVente', 'dateAjout', 'actions'];
+  Stock_columns: string[] = ['reference', 'designation', 'date', 'operation', 'acteur', 'quantité', 'prix', 'valeur', 'actions']
+  stock: any;
+  dataSource = [];
 
-  Articles : any[];
-  Mouvements : any[];
+  Articles: any[];
+  Mouvements: any[];
+  active_articles: any[];
+  vente_caisse: any[];
+
 
   articles: MatTableDataSource<any>;
   mouvements: MatTableDataSource<any>;
 
-  operation= new FormControl('Entrée',Validators.required);
+  mouvement : any  = {};
+
+  operation = new FormControl('Entrée', Validators.required);
   acteur = new FormControl('', Validators.required);
   article = new FormControl('', Validators.required);
-  date= new FormControl('', Validators.required);
+  date = new FormControl('', Validators.required);
   quantite = new FormControl('', Validators.required);
 
 
   constructor(public dialog: MatDialog,
-              db: AngularFireDatabase,
-              private route: ActivatedRoute,
-              private shareservice: ShareService) {
-           
+    db: AngularFireDatabase,
+    private route: ActivatedRoute,
+    private shareservice: ShareService) {
 
+      this.mouvement.operation = 'Entrée'
+      this.mouvement.acteur = ''
+      this.mouvement.article = ''
+      this.mouvement.date = ''
+      this.mouvement.quantite= 0
 
-               }
-               
-                Nombre(total)  : any{
-                  return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-                };
-  ngOnInit() {
-    this.shareservice.getArticles().subscribe(data => {
-      console.log(data)
-      this.Articles = [];
-      data.forEach(element => {
-        console.log(element.key)
-        this.Articles.push({ key :element.key ,...element.payload.val() as {}})
-      })
-      this.l = this.Articles.length+1
-      console.log(this.Articles)
-      this.articles = new MatTableDataSource<any>(this.Articles);
-    })
-    this.shareservice.getMouvements().subscribe(data => {
-      console.log(data)
-      this.Mouvements = [];
-      data.forEach(element => {
-        console.log(element.key)
-        this.Mouvements.push({ key :element.key ,...element.payload.val() as {}})
-        const a =this.shareservice.getArticle(this.Mouvements[this.Mouvements.length-1].article)
-        console.log(a)
-      })
-      console.log(this.Mouvements)
-      this.mouvements = new MatTableDataSource<any>(this.Mouvements);
-    })
-   
   }
 
-//Calculatrice
+
+  ngOnInit() {
+    this.shareservice.getArticles().subscribe(data => {
+      this.Articles = [];
+      data.forEach(element => {
+        this.Articles.push({ key: element.key, ...element.payload.val() as {} })
+      })
+
+      this.l = this.Articles.length + 1
+
+    })
+    this.shareservice.getMouvements().subscribe(data => {
+      this.Mouvements = [];
+      data.forEach(element => {
+        this.Mouvements.push({ key: element.key, ...element.payload.val() as {} })
+        const a = this.shareservice.getArticle(this.Mouvements[this.Mouvements.length - 1].article)
+      })
+      this.mouvements = new MatTableDataSource<any>(this.Mouvements);
+    })
+    this.shareservice.getActiveArticles().subscribe(data => {
+      this.active_articles = [];
+      data.forEach(element => {
+        this.active_articles.push({ key: element.key, ...element.payload.val() as {} })
+      })
+      this.articles = new MatTableDataSource<any>(this.active_articles);
+    })
+    this.vente_caisse = [];
+  }
+  Nombre(total): any {
+    return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  };
+  //Calculatrice
   openCalculatrice(article: Article): void {
-    console.log(article)
     const dialogRef = this.dialog.open(CalculeComponent, {
       width: '600px',
-      data: { article : article}
+      data: { article: article }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
-      this.dataSource.push()
+      console.log('The dialog was closed', result.data);
+      const index = this.dataSource.findIndex((item: any) => {
+        return item.article == result.data.article;
+      })
+      if (index == -1) {
+        this.dataSource.push(result.data)
+        this.dataSource = [...this.dataSource]
+      } else {
+        this.dataSource[index].quantite += result.data.quantite;
+      }
+      // this.dataSource = [...this.dataSource]
+
     });
   }
   // Ajouter Article
-  openAjoutArticle() : void{
+  openAjoutArticle(): void {
     const dialogRef = this.dialog.open(CArticleComponent, {
-      width: '600px',
-      panelClass: 'app-full-bleed-dialog', 
-      data : this.l
+      maxWidth: '600px',
+      panelClass: 'app-full-bleed-dialog',
+      data: this.l
 
     });
 
@@ -133,11 +153,11 @@ export class AppComponent {
     });
   }
   // Etidter Article
-  openEditArticle(element : any): void{
+  openEditArticle(element: any): void {
     const dialogRef = this.dialog.open(UArticleComponent, {
       width: '600px',
-      panelClass: 'app-full-bleed-dialog', 
-      data:element
+      panelClass: 'app-full-bleed-dialog',
+      data: element
 
     });
 
@@ -146,11 +166,23 @@ export class AppComponent {
     });
   }
   // Supprimer Article
-  openSupprimeArticle(element : any): void {
+  openSupprimeArticle(element: any): void {
     const dialogRef = this.dialog.open(DArticleComponent, {
       width: '600px',
-      panelClass: 'app-full-bleed-dialog', 
-      data:element
+      panelClass: 'app-full-bleed-dialog',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+    });
+  }
+  //Supprimer Mouvement
+  openSupprimeMouvement(element: any): void {
+    const dialogRef = this.dialog.open(DMouvementComponent, {
+      width: '600px',
+      panelClass: 'app-full-bleed-dialog',
+      data: element
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -158,27 +190,39 @@ export class AppComponent {
     });
   }
   //Verificcation Stock
-  get isValidInventaire () : boolean{
-    return this.operation.invalid || this.acteur.invalid || this.article.invalid || this.date.invalid || this.quantite.invalid
+  get isValidInventaire(): boolean {
+    return this.mouvement.operation==='' || this.mouvement.acteur==='' || this.mouvement.article==='' || this.mouvement.date==='' || this.mouvement.quantite===0
   }
-  AjoutMouvement(){
-    if (this.isValidInventaire === false){
-            const obj = {
-                operation :this.operation.value,
-                acteur: this.acteur.value,
-                article: this.article.value,
-                date: this.date.value,
-                quantite: this.quantite.value,
-                prix : this.getArticle(this.article.value).prixAchat
-            }
-            
-            this.shareservice.addMouvement(obj).then(() => {
-                this.shareservice.showMsg("Mouvement ajouté avec succès");
-            })
-                .catch(error => {
-                    this.shareservice.showMsg(error.message);
-                });
-    }}
+  AjoutMouvement() {
+    let qte = this.mouvement.quantite;
+    if (this.isValidInventaire === false) {
+      let item = this.getArticle(this.mouvement.article).quantite;
+      if (this.mouvement.operation === "Entrée") { qte += item
+      console.log("entree",qte) }
+      else { qte = item-qte
+        console.log("sortie",qte)  }
+      if (qte >= 0) {
+        const obj = {
+          operation: this.mouvement.operation,
+          acteur: this.mouvement.acteur,
+          article: this.mouvement.article,
+          date: this.mouvement.date,
+          quantite: this.mouvement.quantite,
+          prix: this.getArticle(this.mouvement.article).prixAchat
+        }
+        this.shareservice.addMouvement(obj).then(() => {
+          this.shareservice.updateArticleQte(obj.article, qte)
+          this.shareservice.showMsg("Mouvement ajouté avec succès");
+        })
+          .catch(error => {
+            this.shareservice.showMsg(error.message);
+          });
+      }
+      else {
+        this.shareservice.showMsg("La Quantité en stock est insuffisante")
+      }
+    }
+  }
   // Annuler Operation de vente
   annuler() {
     this.dataSource = [];
@@ -187,13 +231,32 @@ export class AppComponent {
   passer() {
     window.print();
   }
+  supprimer(i) {
+
+    console.log(i);
+    this.dataSource.splice(i, 1);
+    this.dataSource = [...this.dataSource]
+    console.log(this.dataSource)
+  }
+  setColor(item){
+    if (item.quantite<=item.stockMin)
+    return{"background-color" : 'gainsboro'};
+     
+    
+  }
+  getTotalprix() {
+    return this.dataSource.map(t => t.prixUnit * t.quantite).reduce((acc, value) => acc + value, 0);
+  }
   //Chercher un Article par sa clé
-  getArticle (key: string) : any{
-    const index = this.Articles.map(e => e.key).indexOf(key);   
-     return this.Articles[index];
+  getArticle(key: string): any {
+    const index = this.Articles.map(e => e.key).indexOf(key);
+    return this.Articles[index];
   }
   // Filtrer Articles
   FiltrerArticles(filterValue: string) {
     this.articles.filter = filterValue.trim().toLowerCase();
+  }
+  FiltrerMouvement(filterValue: string) {
+    this.mouvements.filter = filterValue.trim().toLowerCase();
   }
 }

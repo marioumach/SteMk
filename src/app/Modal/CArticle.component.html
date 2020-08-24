@@ -1,4 +1,4 @@
-<div class="dialog" fxLayout="column">
+<div fxLayout="column">
     <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
         <h5>Article</h5>
 
@@ -13,7 +13,7 @@
 
 
         <div style="width:100%" fxLayoutGap="50px">
-            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+            <div class="w-100" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-label>Référence</mat-label>
                     <input disabled [(ngModel)]="reference" matInput required>
@@ -23,7 +23,7 @@
                     <input [formControl]="designation" matInput required>
                 </mat-form-field>
             </div>
-            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+            <div class="w-100" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-label>Stock Minimal</mat-label>
                     <input type="number" [formControl]="stockMin" matInput required>
@@ -33,7 +33,7 @@
                     <input type="number" [formControl]="stockInit" matInput required>
                 </mat-form-field>
             </div>
-            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+            <div class="w-100" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-label>Prix d'Achat</mat-label>
                     <input type="number" [formControl]="prixAchat" matInput required>
@@ -43,7 +43,7 @@
                     <input type="number" [formControl]="prixVente" matInput required>
                 </mat-form-field>
             </div>
-            <div class="w-100" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+            <div class="w-100" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-label>Date d'Ajout</mat-label>
                     <input type="date" [formControl]="dateAjout" matInput required>
@@ -69,9 +69,7 @@
     }
 
     .body {
-        padding: 20px;
-
-    }
+        padding: 20px;    }
 
     input[type="file"] {
         display: inline-block;

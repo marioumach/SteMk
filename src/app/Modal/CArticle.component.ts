@@ -61,6 +61,8 @@ export class CArticleComponent implements OnInit {
                 prixAchat: Number(this.prixAchat.value),
                 prixVente: Number(this.prixVente.value),
                 dateAjout: this.dateAjout.value,
+                image :"",
+                active : true
             }
             this.shareService.addArticle(obj).then((data) => {
                 this.updateArticleImage(data.key)
@@ -84,6 +86,7 @@ export class CArticleComponent implements OnInit {
      }
      
      updateArticleImage(key : any){
-        this.shareService.uploadArticleImage(this.articleImage ,key);  
+         if (this.articleImage){
+        this.shareService.uploadArticleImage(this.articleImage ,key); } 
       }
     }
