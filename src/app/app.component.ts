@@ -52,7 +52,7 @@ export class AppComponent {
   Vente: string[] = ['Qte', 'Article', 'PU', 'Total'];
 
   Article_Caisse: string[] = ['action', 'Qte', 'Article', 'PU', 'Total'];
-  Article_columns: string[] = ['reference', 'designation', 'stockMin', 'stockInit', 'prixAchat', 'prixVente', 'dateAjout', 'actions'];
+  Article_columns: string[] = ['reference', 'designation', 'stockMin', 'stockInit', 'Palette','prixAchat', 'prixVente', 'dateAjout', 'actions'];
   Stock_columns: string[] = ['reference', 'designation', 'date', 'operation', 'acteur', 'quantité', 'prix', 'valeur', 'actions']
   stock: any;
   dataSource = [];
@@ -121,7 +121,8 @@ export class AppComponent {
         i+=1
         this.ventes.push({...element.payload.val() as {} })
       })
-
+      this.ventes.sort((a, b) => a < b? 1 : 0);
+      console.log(this.ventes)
       // this.articles = new MatTableDataSource<any>(this.active_articles);
     })
     this.vente_caisse = [];
@@ -138,6 +139,7 @@ export class AppComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result.data);
+      if(result.data){
       const index = this.dataSource.findIndex((item: any) => {
         return item.article == result.data.article;
       })
@@ -146,7 +148,7 @@ export class AppComponent {
         this.dataSource = [...this.dataSource]
       } else {
         this.dataSource[index].quantite += result.data.quantite;
-      }
+      }}
       // this.dataSource = [...this.dataSource]
 
     });
@@ -248,12 +250,42 @@ export class AppComponent {
   }
   // Passer Operation de Vente
   passer() {
+    let ok =true
+    let i
+      this.dataSource.forEach((element) => {
+        let qte = element.quantite
+        let item = this.getArticle(element.article);
+        qte = item.quantite-qte
+       if( qte<0 ) {
+         ok =false
+         i = item
+       }
+        console.log(ok)
+      });
+    if(ok ==true){
+    this.shareservice.addVente(this.dataSource).then(()=>{
+  
     if(this.dataSource.length>0){
-      this.shareservice.addVente(this.dataSource).then(()=>{
-        this.dataSource=[]
-      })
+      this.dataSource.forEach((element) => {
+        let qte = element.quantite
+        console.log(element)
+        let item = this.getArticle(element.article).quantite;
+        qte = item-qte
+       console.log(item)
+       if (qte >= 0) {
+        this.shareservice.updateArticleQte(element.article, qte)
+       }
+       else {
 
+       }
+      });
     }
+    this.dataSource=[]
+  })
+}
+else{
+  this.shareservice.showMsg("La Quantite en stock de : "+ i.designation + " est Insuffisante")
+}
     // window.print();
   }
   supprimer(i) {
@@ -270,7 +302,13 @@ export class AppComponent {
   getTotalprix() {
     return this.dataSource.map(t => t.prixUnit * t.quantite).reduce((acc, value) => acc + value, 0);
   }
-  getTotal(i){}
+  getTotal(j){
+    let v : any[]
+    let i = 0
+    v = this.ventes[j]
+    const V = Object.values(v)
+    return(V.map(t => t.prixUnit * t.quantite).reduce((acc, value) => acc + value, 0))
+  }
   //Chercher un Article par sa clé
   getArticle(key: string): any {
     const index = this.Articles.map(e => e.key).indexOf(key);

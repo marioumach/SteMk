@@ -135,7 +135,7 @@
          
         </div> -->
         </div>
-        <div>
+        <div style="width: 100%;">
           <mat-form-field appearance="outline" class="w-100">
             <input matInput autocomplete="off" (keyup)="FiltrerMouvement($event.target.value)" placeholder="Filtrer">
           </mat-form-field>
@@ -286,10 +286,15 @@
             <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Stock Minimal </cdk-header-cell>
             <cdk-cell *cdkCellDef="let element"> {{element.stockMin}} </cdk-cell>
           </ng-container>
+
           <!-- PU Column -->
           <ng-container cdkColumnDef="stockInit">
             <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Quantite </cdk-header-cell>
             <cdk-cell *cdkCellDef="let element "> {{element.quantite}} </cdk-cell>
+          </ng-container>
+          <ng-container cdkColumnDef="Palette">
+            <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Palette </cdk-header-cell>
+            <cdk-cell *cdkCellDef="let element"> {{((element.quantite)/84).toFixed(1)}} </cdk-cell>
           </ng-container>
           <!-- Total Column -->
           <ng-container cdkColumnDef="dateAjout">
@@ -346,11 +351,69 @@
           <mat-panel-title>
            <span>Vente N° {{j+1}}  </span> 
           </mat-panel-title>
-          <mat-panel-description fxLayoutAlign="space-between center">
+          <mat-panel-description fxLayoutAlign="space-around center">
             <span>
             {{vente[0].date}}  </span>
             <span>
-              Total :
+              Total : {{Nombre(getTotal(j))}} 
+            </span>
+               </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div style=" background-color:white ;
+      height: 100%; width: 100%; border-radius: 5px; margin-top: 15px;" fxLayout="column" fxLayoutGap="15px"
+          fxLayoutAlign="start center">
+
+          <cdk-table [dataSource]="table(j)" class="example-table">
+ 
+            <!-- Position Column -->
+            <ng-container cdkColumnDef="Qte">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Qte </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element"> {{element.quantite}} </cdk-cell>
+
+            </ng-container>
+
+            <!-- Article Column -->
+            <ng-container cdkColumnDef="Article">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Article </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element"> {{getArticle(element.article).designation}} </cdk-cell>
+
+            </ng-container>
+
+            <!-- PU Column -->
+            <ng-container cdkColumnDef="PU">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> P.U </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element">{{Nombre(element.prixUnit)}} </cdk-cell>
+
+            </ng-container>
+
+            <!-- Total Column -->
+            <ng-container cdkColumnDef="Total">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Total </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element">{{Nombre(element.quantite*element.prixUnit)}} </cdk-cell>
+
+            </ng-container>
+
+            <cdk-header-row class="example-header-row" *cdkHeaderRowDef="Vente"></cdk-header-row>
+            <cdk-row class="example-row" *cdkRowDef="let row; columns: Vente;"></cdk-row>
+          </cdk-table>
+
+        </div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+  </mat-tab>
+  <mat-tab label="Ventes">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let vente of ventes ; let j = index;">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+           <span>Vente N° {{j+1}}  </span> 
+          </mat-panel-title>
+          <mat-panel-description fxLayoutAlign="space-around center">
+            <span>
+            {{vente[0].date}}  </span>
+            <span>
+              Total : {{Nombre(getTotal(j))}} 
             </span>
                </mat-panel-description>
         </mat-expansion-panel-header>
