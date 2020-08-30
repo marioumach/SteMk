@@ -31,7 +31,6 @@ export class CArticleComponent implements OnInit {
 
     onChange(evt) {
         this.articleImage = evt.target.files[0];
-        console.log(this.articleImage)
     }
 
 

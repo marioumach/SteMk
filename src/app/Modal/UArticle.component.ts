@@ -16,7 +16,6 @@ export class UArticleComponent implements OnInit {
         public dialogRef: MatDialogRef<UArticleComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private shareService: ShareService) { 
-            console.log(data)
             this.article=data;
             this.article.reference = data.reference ;
             this.article.designation = data.designation ;
@@ -35,7 +34,6 @@ export class UArticleComponent implements OnInit {
 
         onChange(evt) {
             this.articleImage = evt.target.files[0];
-            console.log(this.articleImage)
         }
     ngOnInit(): void { }
     onNoClick(): void {

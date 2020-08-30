@@ -45,7 +45,9 @@ if (e === "Enter") {
     const obj = {
       article : this.article.key , 
       prixUnit : this.PU ,
-      quantite : this.mainText
+      quantite : this.mainText , 
+      date :  new Date().toLocaleString()
+
     }
     this.dialogRef.close({data : obj});
 } else{

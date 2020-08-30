@@ -49,17 +49,19 @@ export class AppComponent {
   title = 'SteMk';
   prix: 3300;
   l: Number;
+  Vente: string[] = ['Qte', 'Article', 'PU', 'Total'];
+
   Article_Caisse: string[] = ['action', 'Qte', 'Article', 'PU', 'Total'];
   Article_columns: string[] = ['reference', 'designation', 'stockMin', 'stockInit', 'prixAchat', 'prixVente', 'dateAjout', 'actions'];
   Stock_columns: string[] = ['reference', 'designation', 'date', 'operation', 'acteur', 'quantité', 'prix', 'valeur', 'actions']
   stock: any;
   dataSource = [];
-
+  dateTime = new Date()
   Articles: any[];
   Mouvements: any[];
   active_articles: any[];
   vente_caisse: any[];
-
+  ventes : any[];
 
   articles: MatTableDataSource<any>;
   mouvements: MatTableDataSource<any>;
@@ -111,6 +113,16 @@ export class AppComponent {
         this.active_articles.push({ key: element.key, ...element.payload.val() as {} })
       })
       this.articles = new MatTableDataSource<any>(this.active_articles);
+    })
+    let i = 0
+    this.shareservice.getVentes().subscribe(data => {
+      this.ventes = [];
+      data.forEach(element => {
+        i+=1
+        this.ventes.push({...element.payload.val() as {} })
+      })
+
+      // this.articles = new MatTableDataSource<any>(this.active_articles);
     })
     this.vente_caisse = [];
   }
@@ -193,6 +205,13 @@ export class AppComponent {
   get isValidInventaire(): boolean {
     return this.mouvement.operation==='' || this.mouvement.acteur==='' || this.mouvement.article==='' || this.mouvement.date==='' || this.mouvement.quantite===0
   }
+  table (j) {
+    let v : any[]
+    let i = 0
+    v = this.ventes[j]
+    const V = Object.values(v)
+    return V
+  }
   AjoutMouvement() {
     let qte = this.mouvement.quantite;
     if (this.isValidInventaire === false) {
@@ -229,14 +248,18 @@ export class AppComponent {
   }
   // Passer Operation de Vente
   passer() {
-    window.print();
+    if(this.dataSource.length>0){
+      this.shareservice.addVente(this.dataSource).then(()=>{
+        this.dataSource=[]
+      })
+
+    }
+    // window.print();
   }
   supprimer(i) {
 
-    console.log(i);
     this.dataSource.splice(i, 1);
     this.dataSource = [...this.dataSource]
-    console.log(this.dataSource)
   }
   setColor(item){
     if (item.quantite<=item.stockMin)
@@ -247,6 +270,7 @@ export class AppComponent {
   getTotalprix() {
     return this.dataSource.map(t => t.prixUnit * t.quantite).reduce((acc, value) => acc + value, 0);
   }
+  getTotal(i){}
   //Chercher un Article par sa clé
   getArticle(key: string): any {
     const index = this.Articles.map(e => e.key).indexOf(key);

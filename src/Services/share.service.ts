@@ -18,13 +18,17 @@ export class ShareService {
         return new Promise((resolve, reject) => {
             const articles = this.getArticles().subscribe((articles) => {
                 const mouvements = this.getArticles().subscribe((mouvements) => {
+                    const ventes = this.getVentes().subscribe((ventes) => {
+
                 const obj = {
                     articles: articles,
-                    mouvements:mouvements
+                    mouvements:mouvements,
+                    ventes : ventes
                 };
                 resolve(obj);
 
             })
+        })
         })
         })
     } 
@@ -85,7 +89,14 @@ export class ShareService {
     getArticle(key : string){
         return this.db.object(`Article/${key}`).snapshotChanges();
     }
-
+    getVentes() {
+        const ref = this.db.list('Vente').snapshotChanges();
+        return ref;
+    }
+    addVente(vente: any) {
+        const itemsRef = this.db.list('Vente');
+        return itemsRef.push(vente);
+    }
     getMouvements() {
         const ref = this.db.list('Mouvement').snapshotChanges();
         return ref;

@@ -26,10 +26,10 @@
           fxLayoutAlign="start center">
 
           <cdk-table [dataSource]="dataSource" class="example-table">
-            <ng-container cdkColumnDef="action" >
+            <ng-container cdkColumnDef="action">
               <cdk-header-cell width="5%" class="example-header-cell" *cdkHeaderCellDef> </cdk-header-cell>
-              <cdk-cell *cdkCellDef="let element ;  let j = index;"> 
-                <mat-icon aria-hidden="false" (click)="supprimer(j)" >clear</mat-icon>
+              <cdk-cell *cdkCellDef="let element ;  let j = index;">
+                <mat-icon aria-hidden="false" (click)="supprimer(j)">clear</mat-icon>
               </cdk-cell>
               <cdk-footer-cell *cdkFooterCellDef>Total</cdk-footer-cell>
             </ng-container>
@@ -89,7 +89,7 @@
           fxLayoutGap="10px" style="margin-top: 10px;">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Type d'opération</mat-label>
-            <mat-select  [(ngModel)]="mouvement.operation" name="operation" required>
+            <mat-select [(ngModel)]="mouvement.operation" name="operation" required>
               <mat-option [value]="'Entrée'">
                 Entrée
               </mat-option>
@@ -119,7 +119,7 @@
           </mat-form-field>
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Quantité</mat-label>
-            <input type="number" autocomplete="off" matInput placeholder="Quantité"[(ngModel)]="mouvement.quantite">
+            <input type="number" autocomplete="off" matInput placeholder="Quantité" [(ngModel)]="mouvement.quantite">
           </mat-form-field>
           <mat-form-field class="w-100" appearance="outline">
             <mat-label>Date</mat-label>
@@ -137,7 +137,7 @@
         </div>
         <div>
           <mat-form-field appearance="outline" class="w-100">
-            <input matInput autocomplete="off"(keyup)="FiltrerMouvement($event.target.value)" placeholder="Filtrer">
+            <input matInput autocomplete="off" (keyup)="FiltrerMouvement($event.target.value)" placeholder="Filtrer">
           </mat-form-field>
         </div>
       </div>
@@ -289,7 +289,7 @@
           <!-- PU Column -->
           <ng-container cdkColumnDef="stockInit">
             <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Quantite </cdk-header-cell>
-            <cdk-cell *cdkCellDef="let element " > {{element.quantite}} </cdk-cell>
+            <cdk-cell *cdkCellDef="let element "> {{element.quantite}} </cdk-cell>
           </ng-container>
           <!-- Total Column -->
           <ng-container cdkColumnDef="dateAjout">
@@ -332,13 +332,71 @@
           </ng-container>
 
           <cdk-header-row class="example-header-row" *cdkHeaderRowDef="Article_columns"></cdk-header-row>
-          <cdk-row  class="example-row" *cdkRowDef="let row; columns: Article_columns;" [ngStyle]="setColor(row)"></cdk-row>
+          <cdk-row class="example-row" *cdkRowDef="let row; columns: Article_columns;" [ngStyle]="setColor(row)">
+          </cdk-row>
 
         </cdk-table>
       </div>
     </div>
   </mat-tab>
-  <mat-tab label="Vente du jour">Content 3</mat-tab>
+  <mat-tab label="Vente du jour">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let vente of ventes ; let j = index;">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+           <span>Vente N° {{j+1}}  </span> 
+          </mat-panel-title>
+          <mat-panel-description fxLayoutAlign="space-between center">
+            <span>
+            {{vente[0].date}}  </span>
+            <span>
+              Total :
+            </span>
+               </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div style=" background-color:white ;
+      height: 100%; width: 100%; border-radius: 5px; margin-top: 15px;" fxLayout="column" fxLayoutGap="15px"
+          fxLayoutAlign="start center">
+
+          <cdk-table [dataSource]="table(j)" class="example-table">
+ 
+            <!-- Position Column -->
+            <ng-container cdkColumnDef="Qte">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Qte </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element"> {{element.quantite}} </cdk-cell>
+
+            </ng-container>
+
+            <!-- Article Column -->
+            <ng-container cdkColumnDef="Article">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Article </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element"> {{getArticle(element.article).designation}} </cdk-cell>
+
+            </ng-container>
+
+            <!-- PU Column -->
+            <ng-container cdkColumnDef="PU">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> P.U </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element">{{Nombre(element.prixUnit)}} </cdk-cell>
+
+            </ng-container>
+
+            <!-- Total Column -->
+            <ng-container cdkColumnDef="Total">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Total </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element">{{Nombre(element.quantite*element.prixUnit)}} </cdk-cell>
+
+            </ng-container>
+
+            <cdk-header-row class="example-header-row" *cdkHeaderRowDef="Vente"></cdk-header-row>
+            <cdk-row class="example-row" *cdkRowDef="let row; columns: Vente;"></cdk-row>
+          </cdk-table>
+
+        </div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+  </mat-tab>
   <mat-tab label="Entrée Sortie Taher">Content 3</mat-tab>
 </mat-tab-group>
 <style>

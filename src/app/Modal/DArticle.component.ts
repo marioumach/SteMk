@@ -16,7 +16,6 @@ export class DArticleComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any,
         private shareService : ShareService) { 
             this.article = data;
-            console.log(data.key);
         }
 
     ngOnInit(): void { }
@@ -26,7 +25,6 @@ export class DArticleComponent implements OnInit {
                 this.shareService.showMsg("Article supprimé avec succès");
               })
               .catch(error => {
-                console.error(error.message);
                 this.shareService.showMsg(error.message)
               })
               this.dialogRef.close();
