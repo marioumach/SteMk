@@ -39,6 +39,7 @@ export class ShareService {
     setArticleImage(croppedFile: string){
         this.articleImg$.next(croppedFile);
     }
+    
     // Set Image
     uploadArticleImage(file, key: string) {
         console.log(key)
@@ -85,6 +86,11 @@ export class ShareService {
     deleteArticle(article: any) {
         const itemsRef = this.db.object(`Article/${article}`);
         return itemsRef.update({active : false});
+    }
+    deleteVente(key: any) {
+        console.log(key)
+        const itemsRef = this.db.object(`Vente/${key}`);
+        return itemsRef.remove();
     }
     getArticle(key : string){
         return this.db.object(`Article/${key}`).snapshotChanges();

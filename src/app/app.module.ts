@@ -20,6 +20,9 @@ import { UArticleComponent } from "./Modal/UArticle.component";
 
 //Delete Mouvement
 import { DMouvementComponent } from "./Modal/DMouvement.component";
+
+//Delete Vente
+import { DVenteComponent } from "./Modal/DVente.component";
 // FireBase
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
@@ -39,7 +42,8 @@ import { ShareService } from "src/services/share.service";
     DArticleComponent,
     CArticleComponent,
     UArticleComponent,
-    DMouvementComponent
+    DMouvementComponent,
+    DVenteComponent
   ],
   imports: [
     //firebase

@@ -11,36 +11,38 @@ export class DMouvementComponent implements OnInit {
     password = "55413494";
     mouvement : any ;
     hide = true;
-    constructor(public dialogRef: MatDialogRef <DArticleComponent>,
+    article : any ;
+    constructor(public dialogRef: MatDialogRef <DMouvementComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private shareService : ShareService) { 
             this.mouvement = data;
+            this.shareService.getArticle(this.mouvement.article).subscribe((a :any) => {
+                console.log(a)
+                this.article= a.payload.val()
+                console.log(this.article)
+            })
         }
 
     ngOnInit(): void { }
     onDelete(){
         if (this.codeVerif===this.password){
             let q =0
-            var article : any
-            this.shareService.getArticle(this.mouvement.article).subscribe((a :any) => {
-                console.log(a)
-                article= a.payload.val()
-                console.log(article)
-
-            }).unsubscribe()
-                console.log(article)
-               q= article.quantite;
+            
+            
+            // .unsubscribe()
+                console.log(this.article)
+              q= this.article.quantite;
                console.log(q)
-                console.log(this.mouvement.quantite)
-               q-=this.mouvement.quantite
-               console.log(q)
+             console.log(this.mouvement.quantite)
+             q-=this.mouvement.quantite
+             console.log(q)
             this.shareService.deleteMouvement(this.mouvement.key).then(()=>{
-                this.shareService.updateArticleQte(this.mouvement.article,q)
-                this.shareService.showMsg("Mouvement supprimé avec succès");
+            this.shareService.updateArticleQte(this.mouvement.article,q)
+              this.shareService.showMsg("Mouvement supprimé avec succès");
               })
-              .catch(error => {
-                console.error(error.message);
-                this.shareService.showMsg(error.message)
+            .catch(error => {
+               console.error(error.message);
+               this.shareService.showMsg(error.message)
               }) 
               this.dialogRef.close();
 

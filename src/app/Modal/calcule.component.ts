@@ -49,6 +49,7 @@ if (e === "Enter") {
       date :  new Date().toLocaleString()
 
     }
+    
     this.dialogRef.close({data : obj});
 } else{
   this.shareService.showMsg("Le prix de vente doit être spérieur au prix d'achat")

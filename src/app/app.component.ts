@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CalculeComponent } from './Modal/calcule.component';
 import { AngularFireDatabase } from '@angular/fire/database';
@@ -11,6 +11,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UArticleComponent } from './Modal/UArticle.component';
 import { FormControl, Validators } from '@angular/forms';
 import { DMouvementComponent } from './Modal/DMouvement.component';
+import {MatSort} from '@angular/material/sort';
+import { DVenteComponent } from './Modal/DVente.component';
 
 
 export interface DialogData {
@@ -45,23 +47,33 @@ export interface Article {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+
   items: Observable<any[]>;
   title = 'SteMk';
   prix: 3300;
   l: Number;
   Vente: string[] = ['Qte', 'Article', 'PU', 'Total'];
-
-  Article_Caisse: string[] = ['action', 'Qte', 'Article', 'PU', 'Total'];
+CA : any
+  Article_Caisse: string[] = ['action',  'Article', 'Qte','PU', 'Total'];
   Article_columns: string[] = ['reference', 'designation', 'stockMin', 'stockInit', 'Palette','prixAchat', 'prixVente', 'dateAjout', 'actions'];
   Stock_columns: string[] = ['reference', 'designation', 'date', 'operation', 'acteur', 'quantité', 'prix', 'valeur', 'actions']
   stock: any;
   dataSource = [];
   dateTime = new Date()
+  DateTime = this.dateTime.toLocaleString().substr(0,10)
+  day = this.dateTime.getDate()
+  month = this.dateTime.getMonth()
+  year = this.dateTime.getFullYear()
   Articles: any[];
   Mouvements: any[];
   active_articles: any[];
   vente_caisse: any[];
-  ventes : any[];
+  ventes : any[] = [];
+  Tventes : any[] = [];
+  TVentes : any[]=[];
+  Ventes : any[] = [];
+  loading = false;
 
   articles: MatTableDataSource<any>;
   mouvements: MatTableDataSource<any>;
@@ -102,10 +114,14 @@ export class AppComponent {
     this.shareservice.getMouvements().subscribe(data => {
       this.Mouvements = [];
       data.forEach(element => {
-        this.Mouvements.push({ key: element.key, ...element.payload.val() as {} })
+        let m : any 
+        m = element.payload.val()
+        this.Mouvements.push({ key: element.key, ...element.payload.val() as {} , designation : this.getArticle(m.article).designation})
         const a = this.shareservice.getArticle(this.Mouvements[this.Mouvements.length - 1].article)
       })
       this.mouvements = new MatTableDataSource<any>(this.Mouvements);
+      console.log(this.mouvements)
+      this.mouvements.sort = this.sort;
     })
     this.shareservice.getActiveArticles().subscribe(data => {
       this.active_articles = [];
@@ -115,17 +131,32 @@ export class AppComponent {
       this.articles = new MatTableDataSource<any>(this.active_articles);
     })
     let i = 0
+
     this.shareservice.getVentes().subscribe(data => {
       this.ventes = [];
+      this.Ventes = []
       data.forEach(element => {
         i+=1
         this.ventes.push({...element.payload.val() as {} })
+        this.Ventes.push(element.key)
+        
+        let d = new Date((element.payload.val()[0].date).substr(0,10));
+        let D = d.toLocaleString().substr(0,10)
+        console.log(D)
+        console.log(this.DateTime)
+        if(D==this.DateTime){
+          console.log(true)
+        }
       })
       this.ventes.sort((a, b) => a < b? 1 : 0);
-      console.log(this.ventes)
+      this.CA=this.getTotalCA();
       // this.articles = new MatTableDataSource<any>(this.active_articles);
     })
     this.vente_caisse = [];
+  }
+  SupprimerVente(v){
+    console.log(this.Ventes[v])
+    this.shareservice.deleteVente(this.Ventes[v])
   }
   Nombre(total): any {
     return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -133,7 +164,8 @@ export class AppComponent {
   //Calculatrice
   openCalculatrice(article: Article): void {
     const dialogRef = this.dialog.open(CalculeComponent, {
-      width: '600px',
+      width: '800px',
+      height:'600px',
       data: { article: article }
     });
 
@@ -250,6 +282,7 @@ export class AppComponent {
   }
   // Passer Operation de Vente
   passer() {
+    this.loading=true;
     let ok =true
     let i
       this.dataSource.forEach((element) => {
@@ -281,13 +314,34 @@ export class AppComponent {
       });
     }
     this.dataSource=[]
-  })
+    this.loading= false;
+  })      .catch(error => {
+    console.error(error.message);
+    this.shareservice.showMsg("Une erreur s'est produite" );
+    this.loading= false;
+
+  });
+
 }
 else{
   this.shareservice.showMsg("La Quantite en stock de : "+ i.designation + " est Insuffisante")
 }
     // window.print();
   }
+    //Supprimer Mouvement
+    openSupprimeVente(i , v): void {
+      console.log(i)
+      console.log(v)
+      const dialogRef = this.dialog.open(DVenteComponent, {
+        width: '600px',
+        panelClass: 'app-full-bleed-dialog',
+        data: {key : this.Ventes[i] , articles : v}
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed', result);
+      });
+    }
   supprimer(i) {
 
     this.dataSource.splice(i, 1);
@@ -309,6 +363,13 @@ else{
     const V = Object.values(v)
     return(V.map(t => t.prixUnit * t.quantite).reduce((acc, value) => acc + value, 0))
   }
+  getTotalCA(){
+    let CA = 0
+    for (let i = 0; i < this.Ventes.length; i++) {
+      CA+=this.getTotal(i)
+    }
+return this.Nombre(CA)
+  }
   //Chercher un Article par sa clé
   getArticle(key: string): any {
     const index = this.Articles.map(e => e.key).indexOf(key);
@@ -319,6 +380,7 @@ else{
     this.articles.filter = filterValue.trim().toLowerCase();
   }
   FiltrerMouvement(filterValue: string) {
+    console.log(this.mouvements)
     this.mouvements.filter = filterValue.trim().toLowerCase();
   }
 }

@@ -1,4 +1,4 @@
-<div (keyup)="onTouche($event)">
+<div (keyup)="onTouche($event)" style="height: 100%;">
 <div fxLayout="row" fxLayoutAlign="space-between start">
     <h1 mat-dialog-title>
 
@@ -10,56 +10,65 @@
   </button>
 
 </div>
-<div fxLayout="row" fxLayoutAlign="space-around start">
+<div fxLayout="row" fxLayoutAlign="space-around start" style="height: 100px">
 
-<h1 mat-dialog-title>
+<h1 mat-dialog-title >
 
-    <span>Qte :</span> <input  type="number"  matInput autocomplete="off" [(ngModel)]="mainText" style="width: 75px;">
+    <mat-form-field appearance="outline">
+        <mat-label>Quantité</mat-label>
+        <input  type="number"  matInput autocomplete="off" [(ngModel)]="mainText" >
+      </mat-form-field>
   
 </h1>
 <h1 mat-dialog-title>
+    <mat-form-field appearance="outline" >
+        <mat-label>Prix</mat-label>
+        <input matInput type="number" autocomplete="off" [(ngModel)]="PU" style="width:80%">   
+       </mat-form-field>
 
-    <span>Prix :</span><input matInput type="number" autocomplete="off" [(ngModel)]="PU" style="width: 75px;">
    
 </h1>
 <h1 mat-dialog-title>
+    <mat-form-field appearance="outline" >
+        <mat-label>{{mainText*this.PU}}</mat-label>
+        <input matInput type="number" autocomplete="off" disabled placeholder="{{mainText*this.PU}}" style="width:80%">   
+       </mat-form-field>
 
-    <span>Total :</span>{{mainText*this.PU}}
    
 </h1>
 
 </div>
 
-<div class="row">
-    <div class="col-md-4 "><button class="w-100" mat-button (click)="pressKey('1')">1</button>
+<div class="row" style="height: 100px;">
+    <div class="col-md-4 "><button class="w-100 h-100 " mat-button (click)="pressKey('1')"><h2>1</h2></button>
     </div>
-    <div class="col-md-4"><button class="w-100"  mat-button (click)="pressKey('2')">2</button>
+    <div class="col-md-4"><button class="w-100 h-100"  mat-button (click)="pressKey('2')"><h2>2</h2></button>
     </div>
-    <div class="col-md-4"><button  class="w-100" mat-button (click)="pressKey('3')">3</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4 "><button class="w-100" mat-button (click)="pressKey('4')">4</button>
-    </div>
-    <div class="col-md-4"><button class="w-100"  mat-button (click)="pressKey('5')">5</button>
-    </div>
-    <div class="col-md-4"><button  class="w-100" mat-button (click)="pressKey('6')">6</button>
+    <div class="col-md-4"><button  class="w-100 h-100" mat-button (click)="pressKey('3')"><h2>3</h2></button>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-4 "><button class="w-100" mat-button (click)="pressKey('7')">7</button>
+<div class="row" style="height: 100px;">
+    <div class="col-md-4 "><button class="w-100 h-100" mat-button (click)="pressKey('4')"><h2>4</h2></button>
     </div>
-    <div class="col-md-4"><button class="w-100"  mat-button (click)="pressKey('8')">8</button>
+    <div class="col-md-4"><button class="w-100 h-100"  mat-button (click)="pressKey('5')"><h2>5</h2></button>
     </div>
-    <div class="col-md-4"><button  class="w-100" mat-button (click)="pressKey('9')">9</button>
+    <div class="col-md-4"><button  class="w-100 h-100" mat-button (click)="pressKey('6')"><h2>6</h2></button>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-4 "><button class="w-100" mat-button (click)="onDelete()"><mat-icon aria-hidden="false" aria-label="Example backspace icon">backspace</mat-icon></button>
+<div class="row"style="height: 100px;" >
+    <div class="col-md-4 "><button class="w-100 h-100" mat-button (click)="pressKey('7')"><h2>7</h2></button>
     </div>
-    <div class="col-md-4"><button class="w-100"  mat-button (click)="pressKey('0')">0</button>
+    <div class="col-md-4"><button class="w-100 h-100"  mat-button (click)="pressKey('8')"><h2>8</h2></button>
     </div>
-    <div class="col-md-4"><button  class="w-100" mat-button (click)="passer()" cdkFocusInitial><mat-icon aria-hidden="false" aria-label="Example check_box icon">check_box</mat-icon></button>
+    <div class="col-md-4"><button  class="w-100 h-100" mat-button (click)="pressKey('9')"><h2>9</h2></button>
+    </div>
+</div>
+<div class="row" style="height: 100px;">
+    <div class="col-md-4 "><button class="w-100 h-100" mat-button (click)="onDelete()"><mat-icon aria-hidden="false" aria-label="Example backspace icon">backspace</mat-icon></button>
+    </div>
+    <div class="col-md-4"><button class="w-100 h-100"  mat-button (click)="pressKey('0')"><h2>0</h2></button>
+    </div>
+    <div class="col-md-4"><button  class="w-100 h-100" mat-button (click)="passer()" cdkFocusInitial><mat-icon aria-hidden="false" aria-label="Example check_box icon">check_box</mat-icon></button>
     </div>
 </div>
 </div>
