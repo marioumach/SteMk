@@ -26,12 +26,12 @@ export class CalculeComponent {
       console.log(this.PU)
      }
 
-  onTouche(event: KeyboardEvent): void {
-    var e = event.key;
-if (e === "Enter") {
-      this.passer()
-    }
-  }
+//   onTouche(event: KeyboardEvent): void {
+//     var e = event.key;
+// if (e === "Enter") {
+//       this.passer()
+//     }
+//   }
   onDelete(): void {
     this.mainText = Number(this.mainText.toString().slice(0, -1))
     console.log(this.mainText)
@@ -39,7 +39,7 @@ if (e === "Enter") {
   passer(): void {
     if (this.PU > this.article.prixAchat) {
     console.log(this.mainText)
-    if(this.mainText==0){
+    if(this.mainText===0){
       this.mainText=1
     }
     const obj = {

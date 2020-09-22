@@ -1,0 +1,46 @@
+<div fxLayout="column">
+    <mat-toolbar>
+      <h5>Echange {{type}} </h5>
+    </mat-toolbar>
+    <div class="body" fxLayout="column">
+      <div fxLayout="column" fxLayoutGap="10px" fxLayout.xs="column">
+      <mat-label *ngIf="type == '3 en 1'" >Etes vous sûr de vouloir echanger  : <b> 3 consignes 11 L vers 1 Consigne 19 L </b> ?</mat-label>
+      <mat-label *ngIf="type == '1 en 3'">Etes vous sûr de vouloir echanger  : <b> 1 consigne 19 L vers 3 Consignes 11 L </b> ?</mat-label>
+<div fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxLayout="column" fxLayoutAlign="start start">
+            <button mat-icon-button (click)="plus()"><mat-icon color="green">expand_less</mat-icon></button>
+            <button mat-icon-button (click)="minus()"><mat-icon color="green">expand_more</mat-icon></button>
+        </div>
+        <mat-form-field appearance="outline" >
+            <mat-label>Ancien</mat-label>
+            <input matInput autocomplete="off" [(ngModel)]="Ancien" >   
+           </mat-form-field>
+           <mat-form-field appearance="outline" >
+            <mat-label>Nouveau</mat-label>
+            <input matInput  autocomplete="off" [(ngModel)]="Nouveau" >   
+           </mat-form-field>
+      </div>  </div>
+      <div class="dialog-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+        <button mat-stroked-button style="color: green;" (click)="echanger()">Echanger</button>
+        <button mat-stroked-button (click)="echanger" > Annuler</button>
+      </div>
+    </div>
+  </div>
+  <style>
+          mat-toolbar{
+            background: green;
+            color: #fff;
+        }
+        .body{
+          
+         padding: 20px;
+            
+        }
+        .dialog-footer{
+            padding-bottom: 10px 0;
+        }
+        b{
+          color: green;
+        }
+       
+  </style>

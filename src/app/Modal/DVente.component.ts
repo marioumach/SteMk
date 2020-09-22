@@ -9,6 +9,7 @@ export class DVenteComponent implements OnInit {
     codeVerif : string = "" ;
     password = "55413494";
     articles : any ;
+    Articles : any[] = []
     key : any ;
     hide = true;
     constructor(public dialogRef: MatDialogRef <DVenteComponent>,
@@ -16,6 +17,12 @@ export class DVenteComponent implements OnInit {
         private shareService : ShareService) { 
             this.key = data.key;
             this.articles = data.articles;
+            this.table().forEach(element => {
+                this.shareService.getArticle(element.article).subscribe((a :any) => {
+                    this.Articles.push({key : a.key , qteA : a.payload.val().quantite , qteV:element.quantite})
+                 })
+            }); 
+            console.log(this.Articles)
         }
         table () {
             let v : any[]
@@ -28,22 +35,11 @@ export class DVenteComponent implements OnInit {
     ngOnInit(): void { }
     onDelete(){
         if (this.codeVerif===this.password){
-            // // let q =0
-            // // var article : any
-            // // this.shareService.getArticle(this.vente.article).subscribe((a :any) => {
-            // //     console.log(a)
-            // //     article= a.payload.val()
-            // //     console.log(article)
 
-            // // }).unsubscribe()
-            // //     console.log(article)
-            // //    q= article.quantite;
-            // //    console.log(q)
-            // //     console.log(this.mouvement.quantite)
-            // //    q-=this.mouvement.quantite
-            // //    console.log(q)
             this.shareService.deleteVente(this.key).then(()=>{
-                // this.shareService.updateArticleQte(this.mouvement.article,q)
+                this.Articles.forEach(article => {
+                    this.shareService.updateArticleQte(article.key,article.qteA+article.qteV)
+                });
                 this.shareService.showMsg("Vente supprimée avec succès");
               })
               .catch(error => {

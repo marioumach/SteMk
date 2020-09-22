@@ -8,23 +8,55 @@
         <div class="col-sm-4 col-md-8 row " style=" background-color:#757575 ;">
           <div class="col-sm-4 col-md-3 article" *ngFor="let article of active_articles">
             <mat-card class="example-card">
-              <mat-card-header style="height: 50px;">
-                <p style=" margin: 0 !important;"> {{article.designation}}</p>
+              <mat-card-header style="height: 50px;" fxLayout="column" fxLayoutAlign="center center">
+                <h5 style=" margin: 0 !important;"> {{article.designation}}</h5>
                 <span class="notify-badge">{{article.prixVente}}</span>
               </mat-card-header>
-              <mat-card-content class="item">
-                <button mat-button (click)="openCalculatrice(article)">
+              <mat-card-content class="item w-100 h-100">
+                <button class="w-100" mat-button (click)="openCalculatrice(article)">
                   <img mat-card-image [src]="article.image==''?'./assets/images/Bouteille.png':article.image"
-                    style="margin-top: 0;" height="100px">
+                    style="margin-top: 0;" width="100%" height="100px">
                 </button>
               </mat-card-content>
             </mat-card>
           </div>
+          <!-- <div class="col-sm-4 col-md-3 article">
+
+            <mat-card class="example-card">
+              <mat-card-header style="height: 50px;" fxLayout="column" fxLayoutAlign="center center">
+                <h5 style=" margin: 0 !important;"> 3 en 1</h5>
+                <span class="notify-badge1">Echange</span>
+              </mat-card-header>
+              <mat-card-content class="item w-100 h-100">
+                <button class="w-100" mat-button (click)="openEchange('3 en 1')">
+                  <img mat-card-image [src]="'./assets/images/echange.png'" style="margin-top: 0;" width="100%"
+                    height="100px">
+                </button>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div class="col-sm-4 col-md-3 article">
+
+            <mat-card class="example-card">
+              <mat-card-header style="height: 50px;" fxLayout="column" fxLayoutAlign="center center">
+                <h5 style=" margin: 0 !important;"> 1 en 3</h5>
+                <span class="notify-badge1">Echange</span>
+              </mat-card-header>
+              <mat-card-content class="item w-100 h-100">
+                <button class="w-100" mat-button (click)="openEchange('1 en 3')">
+                  <img mat-card-image [src]="'./assets/images/echange.png'" style="margin-top: 0;" width="100%"
+                    height="100px">
+                </button>
+              </mat-card-content>
+            </mat-card> 
+          </div>-->
         </div>
         <!-- Tableau de Caisse -->
         <div class="col-md-4" style=" background-color:white ;
         height: 100%;  border-radius: 5px; margin-top: 15px;" fxLayout="column" fxLayoutGap="15px"
           fxLayoutAlign="start center">
+          <div></div>
+          <span class="notify-badge">Vente n°{{TVentes.length+1}}</span>
 
           <cdk-table [dataSource]="dataSource" class="example-table">
             <ng-container cdkColumnDef="action">
@@ -59,8 +91,10 @@
 
             <!-- Total Column -->
             <ng-container cdkColumnDef="Total">
-              <cdk-header-cell  [ngClass]="'w-75'"class="example-header-cell" *cdkHeaderCellDef> Total </cdk-header-cell>
-              <cdk-cell [ngClass]="'w-75'" *cdkCellDef="let element">{{Nombre(element.quantite*element.prixUnit)}} </cdk-cell>
+              <cdk-header-cell [ngClass]="'w-75'" class="example-header-cell" *cdkHeaderCellDef> Total
+              </cdk-header-cell>
+              <cdk-cell [ngClass]="'w-75'" *cdkCellDef="let element">{{Nombre(element.quantite*element.prixUnit)}}
+              </cdk-cell>
               <cdk-footer-cell [ngClass]="'w-75'" *cdkFooterCellDef>{{Nombre(getTotalprix())}}</cdk-footer-cell>
 
             </ng-container>
@@ -72,7 +106,8 @@
 
           <div class="w-100" style="padding: 10px !important;" fxLayout="row" fxLayoutAlign="space-between start">
             <button mat-raised-button (click)="annuler()" class="operation" [disabled]="loading">Annuler</button>
-            <button mat-raised-button color="primary" (click)="passer()" class="operation" [disabled]="loading">
+            <button mat-raised-button color="primary" (click)="passer()" class="operation"
+              [disabled]="loading || isValidVente">
               {{loading?'Loading..':'Passer'}}</button>
           </div>
 
@@ -97,6 +132,7 @@
               <mat-option [value]="'Sortie'">
                 Sortie
               </mat-option>
+           
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="outline" class="w-100">
@@ -107,6 +143,9 @@
               </mat-option>
               <mat-option [value]="'Gaddour'">
                 Gaddour
+              </mat-option>
+              <mat-option [value]="'Echange'">
+                Echange
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -145,12 +184,14 @@
       <!-- Tableau de Mouvements -->
       <div class="example-container">
         <cdk-table [dataSource]="mouvements" class="example-table"
-          class="mat-elevation-z8 table table-responsive-md table-striped " matSort>
+          class="mat-elevation-z8 table table-responsive-md table-striped " #sortM="matSort" matSort>
           <!-- Position Column -->
           <ng-container cdkColumnDef="reference">
-            <cdk-header-cell [ngClass]="'w-40'" class="example-header-cell" fxShow fxHide.lt-sm *cdkHeaderCellDef> Ref
+            <cdk-header-cell mat-sort-header [ngClass]="'w-40'" class="example-header-cell" fxShow fxHide.lt-sm
+              *cdkHeaderCellDef> Ref
             </cdk-header-cell>
-            <cdk-cell [ngClass]="'w-40'" fxShow fxHide.lt-sm *cdkCellDef="let element"> {{getArticle(element.article).reference}}
+            <cdk-cell [ngClass]="'w-40'" fxShow fxHide.lt-sm *cdkCellDef="let element">
+              {{getArticle(element.article).reference}}
             </cdk-cell>
           </ng-container>
 
@@ -164,44 +205,52 @@
 
           <!-- PU Column -->
           <ng-container cdkColumnDef="date">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" fxShow fxHide.lt-sm *cdkHeaderCellDef> Date </cdk-header-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-120'" class="example-header-cell" fxShow fxHide.lt-sm
+              *cdkHeaderCellDef> Date </cdk-header-cell>
             <cdk-cell [ngClass]="'w-120'" fxShow fxHide.lt-sm *cdkCellDef="let element"> {{element.date}} </cdk-cell>
           </ng-container>
           <!-- PU Column -->
           <ng-container cdkColumnDef="operation">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Operation </cdk-header-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef>
+              Operation </cdk-header-cell>
             <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element"> {{element.operation}} </cdk-cell>
           </ng-container>
           <!-- PU Column -->
           <ng-container cdkColumnDef="acteur">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Acteur </cdk-header-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Acteur
+            </cdk-header-cell>
             <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element"> {{element.acteur}} </cdk-cell>
           </ng-container>
           <!-- PU Column -->
           <ng-container cdkColumnDef="quantité">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Quantité </cdk-header-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Quantité
+            </cdk-header-cell>
             <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element"> {{element.quantite}} </cdk-cell>
           </ng-container>
           <!-- PU Column -->
           <ng-container cdkColumnDef="prix">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Prix </cdk-header-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Prix
+            </cdk-header-cell>
             <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element"> {{Nombre(element.prix)}} </cdk-cell>
           </ng-container>
           <!-- Total Column -->
           <ng-container cdkColumnDef="valeur">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" fxShow fxHide.lt-sm *cdkHeaderCellDef> Valeur
+            <cdk-header-cell mat-sort-header [ngClass]="'w-120'" class="example-header-cell" fxShow fxHide.lt-sm
+              *cdkHeaderCellDef> Valeur
             </cdk-header-cell>
-            <cdk-cell [ngClass]="'w-120'" fxShow fxHide.lt-sm *cdkCellDef="let element"> {{Nombre(element.prix*element.quantite)}}
+            <cdk-cell [ngClass]="'w-120'" fxShow fxHide.lt-sm *cdkCellDef="let element">
+              {{Nombre(element.prix*element.quantite)}}
             </cdk-cell>
           </ng-container>
 
           <ng-container cdkColumnDef="actions">
-            <cdk-header-cell [ngClass]="'w-120'" fxShow fxHide.lt-sm class="example-header-cell" *cdkHeaderCellDef fxLayout="row"
-              fxLayoutAlign="space-between">
+            <cdk-header-cell [ngClass]="'w-120'" fxShow fxHide.lt-sm class="example-header-cell" *cdkHeaderCellDef
+              fxLayout="row" fxLayoutAlign="space-between">
 
               <span>Supprimer</span>
             </cdk-header-cell>
-            <cdk-cell [ngClass]="'w-120'" fxShow fxHide.lt-sm *cdkCellDef="let element" fxLayout="row" fxLayoutAlign="space-between">
+            <cdk-cell [ngClass]="'w-120'" fxShow fxHide.lt-sm *cdkCellDef="let element" fxLayout="row"
+              fxLayoutAlign="space-between">
               <button mat-icon-button style="color: red;" (click)="openSupprimeMouvement(element)">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -214,7 +263,8 @@
           </ng-container>
 
           <ng-container cdkColumnDef="Supprimer">
-            <cdk-header-cell  [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Supprimer </cdk-header-cell>
+            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Supprimer
+            </cdk-header-cell>
             <cdk-cell *cdkCellDef="let element" fxLayout="column" fxLayoutAlign="center start">
               <button [ngClass]="'w-120'" mat-icon-button style="color: #506169;">
                 <mat-icon>delete</mat-icon>
@@ -257,52 +307,62 @@
       <!-- Tableaux d'Articles -->
       <div class="example-container">
         <cdk-table [dataSource]="articles" class="example-table"
-          class="mat-elevation-z8 table table-responsive-md table-striped ">
+          class="mat-elevation-z8 table table-responsive-md table-striped " #sortA="matSort" matSort>
           <!-- Position Column -->
           <ng-container cdkColumnDef="reference">
-            <cdk-header-cell [ngClass]="'w-50'" class="example-header-cell" *cdkHeaderCellDef> Ref </cdk-header-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-50'" class="example-header-cell" *cdkHeaderCellDef> Ref
+            </cdk-header-cell>
             <cdk-cell [ngClass]="'w-50'" *cdkCellDef="let element"> {{element.reference}} </cdk-cell>
           </ng-container>
 
           <!-- Article Column -->
           <ng-container cdkColumnDef="designation">
-            <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Designation </cdk-header-cell>
+            <cdk-header-cell mat-sort-header class="example-header-cell" *cdkHeaderCellDef> Designation
+            </cdk-header-cell>
             <cdk-cell *cdkCellDef="let element"> {{element.designation}} </cdk-cell>
           </ng-container>
 
           <!-- PU Column -->
           <ng-container cdkColumnDef="prixVente">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Prix de vente </cdk-header-cell>
-            <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element"> {{Nombre(element.prixVente)}} </cdk-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-60'" class="example-header-cell" *cdkHeaderCellDef> P.Vente
+            </cdk-header-cell>
+            <cdk-cell [ngClass]="'w-60'" *cdkCellDef="let element"> {{Nombre(element.prixVente)}} </cdk-cell>
           </ng-container>
           <!-- PU Column -->
           <ng-container cdkColumnDef="prixAchat">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Prix d'achat </cdk-header-cell>
-            <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element"> {{Nombre(element.prixAchat)}} </cdk-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-60'" class="example-header-cell" *cdkHeaderCellDef> P.Achat
+            </cdk-header-cell>
+            <cdk-cell [ngClass]="'w-60'" *cdkCellDef="let element"> {{Nombre(element.prixAchat)}} </cdk-cell>
           </ng-container>
           <!-- PU Column -->
           <ng-container cdkColumnDef="stockMin">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Stock Minimal </cdk-header-cell>
-            <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element"> {{element.stockMin}} </cdk-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-60'" class="example-header-cell" *cdkHeaderCellDef> S.Min
+            </cdk-header-cell>
+            <cdk-cell [ngClass]="'w-60'" *cdkCellDef="let element"> {{Nombre(element.stockMin)}} </cdk-cell>
           </ng-container>
 
           <!-- PU Column -->
-          <ng-container cdkColumnDef="stockInit">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Quantite </cdk-header-cell>
-            <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element "> {{element.quantite}} </cdk-cell>
+          <ng-container cdkColumnDef="quantite">
+            <cdk-header-cell mat-sort-header [ngClass]="'w-60'" class="example-header-cell" *cdkHeaderCellDef> Qte
+            </cdk-header-cell>
+            <cdk-cell [ngClass]="'w-60'" *cdkCellDef="let element "> {{Nombre(element.quantite)}} </cdk-cell>
           </ng-container>
           <ng-container cdkColumnDef="Palette">
-            <cdk-header-cell [ngClass]="'w-120'"  class="example-header-cell" *cdkHeaderCellDef> Palette </cdk-header-cell>
-            <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element"> {{((element.quantite)/element.stockMin).toFixed(1)}} </cdk-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-60'" class="example-header-cell" *cdkHeaderCellDef> Palette
+            </cdk-header-cell>
+            <cdk-cell [ngClass]="'w-60'" *cdkCellDef="let element"> {{((element.quantite)/element.stockMin).toFixed(1)}}
+            </cdk-cell>
           </ng-container>
           <!-- Total Column -->
           <ng-container cdkColumnDef="dateAjout">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Date d'Ajout </cdk-header-cell>
+            <cdk-header-cell mat-sort-header [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Date
+              d'Ajout </cdk-header-cell>
             <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element"> {{element.dateAjout}} </cdk-cell>
           </ng-container>
 
           <ng-container cdkColumnDef="actions">
-            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef fxLayout="row" fxLayoutAlign="space-between">
+            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef fxLayout="row"
+              fxLayoutAlign="space-between">
               <span>Modifier</span>
               <span>Supprimer</span>
             </cdk-header-cell>
@@ -322,8 +382,9 @@
           </ng-container>
 
           <ng-container cdkColumnDef="Supprimer">
-            <cdk-header-cell  [ngClass]="'w-120'"class="example-header-cell" *cdkHeaderCellDef> Supprimer </cdk-header-cell>
-            <cdk-cell  [ngClass]="'w-120'" *cdkCellDef="let element" fxLayout="column" fxLayoutAlign="center start">
+            <cdk-header-cell [ngClass]="'w-120'" class="example-header-cell" *cdkHeaderCellDef> Supprimer
+            </cdk-header-cell>
+            <cdk-cell [ngClass]="'w-120'" *cdkCellDef="let element" fxLayout="column" fxLayoutAlign="center start">
               <button mat-icon-button style="color: #506169;">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -346,7 +407,7 @@
   <mat-tab label="Vente du jour" fxLayout="column" fxLayoutAlign="end end">
 
     <mat-accordion>
-      <mat-expansion-panel *ngFor="let vente of ventes ; let j = index;">
+      <mat-expansion-panel *ngFor="let vente of Tventes ; let j = index;">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <span>Vente N° {{j+1}} </span>
@@ -355,9 +416,9 @@
             <span>
               {{vente[0].date}} </span>
             <span>
-              Total : {{Nombre(getTotal(j))}}
+              Total : {{Nombre(getTodayTotal(j))}}
             </span>
-            <button (click)="openSupprimeVente(j , vente)" mat-button>
+            <button (click)="openSupprimeTodayVente(j,vente)" mat-button>
               <mat-icon>delete</mat-icon>
             </button>
           </mat-panel-description>
@@ -366,7 +427,7 @@
       height: 100%; width: 100%; border-radius: 5px; margin-top: 15px;" fxLayout="column" fxLayoutGap="15px"
           fxLayoutAlign="start center">
 
-          <cdk-table [dataSource]="table(j)" class="example-table">
+          <cdk-table [dataSource]="todayVente(j)" class="example-table">
 
             <!-- Position Column -->
             <ng-container cdkColumnDef="Qte">
@@ -405,10 +466,22 @@
 
     </mat-accordion>
     <div>
-      Chiffre d'affaire = {{getTotalCA()}}
+      Chiffre d'affaire = {{getTodayTotalCA()}}
     </div>
   </mat-tab>
   <mat-tab label="Ventes">
+  
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <mat-form-field>
+      <input matInput type="date" [disabled]="disabled"  [(ngModel)]="startDate">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="date" [disabled]="disabled" [(ngModel)]="endDate">
+    </mat-form-field>
+    <button mat-icon-button [disabled]="disabled" (click)="FilterVentes()"><mat-icon>search</mat-icon></button>
+    <button mat-icon-button (click)="Reset()"><mat-icon>close</mat-icon></button>
+    <div>  {{ventes.length}} Ventes</div>
+</div>
     <mat-accordion>
       <mat-expansion-panel *ngFor="let vente of ventes ; let j = index;">
         <mat-expansion-panel-header>
@@ -465,8 +538,19 @@
       </mat-expansion-panel>
 
     </mat-accordion>
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+
+    <mat-form-field>
+      <input matInput type="password" [(ngModel)]="MDP">
+    </mat-form-field>
+    <div *ngIf="MDP =='55413494'">
+      CA : {{getTotalCA()}}
+
+    </div>
+    
+    </div>
   </mat-tab>
-  <mat-tab label=" " disabled>Content 3</mat-tab>
+  <mat-tab label="" disabled>Content 3</mat-tab>
 </mat-tab-group>
 <style>
   cdk-row,
@@ -493,7 +577,19 @@
 
   .notify-badge {
     position: absolute;
-    right: 25%;
+    right: 40%;
+    margin-top: -20px;
+    top: 10px;
+    background: #3f51b5;
+    text-align: center;
+    border-radius: 30px 30px 30px 30px;
+    color: white;
+    padding: 0px 15px;
+  }
+
+  .notify-badge1 {
+    position: absolute;
+    right: 30%;
     margin-top: -20px;
     top: 10px;
     background: #3f51b5;
@@ -506,13 +602,20 @@
   .w-50 {
     max-width: 50px;
   }
+
   .w-75 {
     max-width: 75px;
   }
+
   .w-40 {
     max-width: 40px;
   }
+
   .w-120 {
     max-width: 120px;
+  }
+
+  .w-60 {
+    max-width: 60px;
   }
 </style>

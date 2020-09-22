@@ -20,7 +20,8 @@ import { UArticleComponent } from "./Modal/UArticle.component";
 
 //Delete Mouvement
 import { DMouvementComponent } from "./Modal/DMouvement.component";
-
+//Echange Modal
+import { EchangeComponent} from "./Modal/echange.component";
 //Delete Vente
 import { DVenteComponent } from "./Modal/DVente.component";
 // FireBase
@@ -43,7 +44,8 @@ import { ShareService } from "src/services/share.service";
     CArticleComponent,
     UArticleComponent,
     DMouvementComponent,
-    DVenteComponent
+    DVenteComponent,
+    EchangeComponent
   ],
   imports: [
     //firebase
