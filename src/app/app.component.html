@@ -480,9 +480,103 @@
     </mat-form-field>
     <button mat-icon-button [disabled]="disabled" (click)="FilterVentes()"><mat-icon>search</mat-icon></button>
     <button mat-icon-button (click)="Reset()"><mat-icon>close</mat-icon></button>
-    <div>  {{ventes.length}} Ventes</div>
+    
 </div>
-    <mat-accordion>
+<!-- <div class="row ">
+  <div class="col-sm-4 col-md-2" *ngFor="let jvente of JVentes ; let j = index;">
+    <mat-card class="example-card">
+      <mat-card-header  fxLayout="column" fxLayoutAlign="center center">
+        <h5 style=" margin: 0 !important;"> {{getDate(jvente[0][0].date)}}</h5>
+      </mat-card-header>
+      <mat-card-content style="height: 50px;" class="item w-100 h-100">
+        <button class="w-100" mat-button>
+          <div>{{jvente.length}} : Ventes</div>
+          <div>CA : {{Nombre(getJourTotal(j))}}</div>
+          <div></div>
+
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  </div> -->
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let jvente of JVentes  ; let j = index;">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span>{{getDate(jvente[0][0].date)}} </span>
+        </mat-panel-title>
+        <mat-panel-description *ngIf="MDP =='55413494'" fxLayoutAlign="space-around center">
+          <span style="width: 100px;">
+            {{jvente.length}} : Ventes </span>
+          <span style="width: 100px;">
+            CA : {{Nombre(getJourTotal(j))}}
+            <!-- Marge : {{Nombre(getJourMarge(j))}} -->
+          </span>
+          <span style="width: 100px;">
+            M : {{Nombre(getJourMarge(j))}}
+          </span>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let vente of jvente ; let j = index;">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span>Vente N° {{j+1}} </span>
+              </mat-panel-title>
+              <mat-panel-description fxLayoutAlign="space-around center">
+                <span>
+                  {{vente[0].date}} </span>
+                <span>
+                  Total : {{Nombre(getTotal(j))}}
+                </span>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div style=" background-color:white ;
+          height: 100%; width: 100%; border-radius: 5px; margin-top: 15px;" fxLayout="column" fxLayoutGap="15px"
+              fxLayoutAlign="start center">
+    
+              <cdk-table [dataSource]="table(j)" class="example-table">
+    
+                <!-- Position Column -->
+                <ng-container cdkColumnDef="Qte">
+                  <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Qte </cdk-header-cell>
+                  <cdk-cell *cdkCellDef="let element"> {{element.quantite}} </cdk-cell>
+    
+                </ng-container>
+    
+                <!-- Article Column -->
+                <ng-container cdkColumnDef="Article">
+                  <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Article </cdk-header-cell>
+                  <cdk-cell *cdkCellDef="let element"> {{getArticle(element.article).designation}} </cdk-cell>
+    
+                </ng-container>
+    
+                <!-- PU Column -->
+                <ng-container cdkColumnDef="PU">
+                  <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> P.U </cdk-header-cell>
+                  <cdk-cell *cdkCellDef="let element">{{Nombre(element.prixUnit)}} </cdk-cell>
+    
+                </ng-container>
+    
+                <!-- Total Column -->
+                <ng-container cdkColumnDef="Total">
+                  <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Total </cdk-header-cell>
+                  <cdk-cell *cdkCellDef="let element">{{Nombre(element.quantite*element.prixUnit)}} </cdk-cell>
+    
+                </ng-container>
+    
+                <cdk-header-row class="example-header-row" *cdkHeaderRowDef="Vente"></cdk-header-row>
+                <cdk-row class="example-row" *cdkRowDef="let row; columns: Vente;"></cdk-row>
+              </cdk-table>
+    
+            </div>
+          </mat-expansion-panel>
+    
+        </mat-accordion>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+    <!-- <mat-accordion>
       <mat-expansion-panel *ngFor="let vente of ventes ; let j = index;">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -502,28 +596,24 @@
 
           <cdk-table [dataSource]="table(j)" class="example-table">
 
-            <!-- Position Column -->
             <ng-container cdkColumnDef="Qte">
               <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Qte </cdk-header-cell>
               <cdk-cell *cdkCellDef="let element"> {{element.quantite}} </cdk-cell>
 
             </ng-container>
 
-            <!-- Article Column -->
             <ng-container cdkColumnDef="Article">
               <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Article </cdk-header-cell>
               <cdk-cell *cdkCellDef="let element"> {{getArticle(element.article).designation}} </cdk-cell>
 
             </ng-container>
 
-            <!-- PU Column -->
             <ng-container cdkColumnDef="PU">
               <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> P.U </cdk-header-cell>
               <cdk-cell *cdkCellDef="let element">{{Nombre(element.prixUnit)}} </cdk-cell>
 
             </ng-container>
 
-            <!-- Total Column -->
             <ng-container cdkColumnDef="Total">
               <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Total </cdk-header-cell>
               <cdk-cell *cdkCellDef="let element">{{Nombre(element.quantite*element.prixUnit)}} </cdk-cell>
@@ -537,15 +627,17 @@
         </div>
       </mat-expansion-panel>
 
-    </mat-accordion>
-    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+    </mat-accordion> -->
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
 
     <mat-form-field>
       <input matInput type="password" [(ngModel)]="MDP">
     </mat-form-field>
-    <div *ngIf="MDP =='55413494'">
-      CA : {{getTotalCA()}}
-
+    <div *ngIf="MDP =='55413494'" fxLayout="row" fxLayoutGap="10px">
+      <div> Ventes :{{ventes.length}} </div>
+      <div> CA : {{getTotalCA()}} </div>
+      <div> Marge: {{getTotalMarge()}} </div>
+      
     </div>
     
     </div>

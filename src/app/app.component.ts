@@ -59,6 +59,7 @@ export class AppComponent {
   ventes: any[] = [];
   filtered_V: any[];
   Tventes: any[] = [];
+  JVentes : any[][]= []
   TV : any[]=[] 
   TVentes: any[] = [];
   Ventes: any[] = [];
@@ -349,12 +350,41 @@ export class AppComponent {
     const V = Object.values(v)
     return (V.map(t => t.prixUnit * t.quantite).reduce((acc, value) => acc + value, 0))
   }
+  getJourTotal(j) {
+    let v: any[]
+    let s=0
+    this.JVentes[j].forEach((v : any) => {
+      const V = Object.values(v)
+      s+= V.map((t : any) => t.prixUnit * t.quantite).reduce((acc, value) => acc + value, 0)
+    });
+return s
+  }
+  getJourMarge(j) {
+    let v: any[]
+    let s=0
+    let a : any
+    this.JVentes[j].forEach((v : any) => {
+      const V = Object.values(v)
+      
+      s+= V.map((t : any) => {
+        a= this.getArticle(t.article).prixAchat
+        return ((t.prixUnit-a) * t.quantite)
+      }).reduce((acc, value) => acc + value, 0)
+    });
+return s}
   getTotalCA() {
     let CA = 0
-    for (let i = 0; i < this.ventes.length; i++) {
-      CA += this.getTotal(i)
+    for (let i = 0; i < this.JVentes.length; i++) {
+      CA += this.getJourTotal(i)
     }
     return this.Nombre(CA)
+  }
+  getTotalMarge() {
+    let M = 0
+    for (let i = 0; i < this.JVentes.length; i++) {
+      M += this.getJourMarge(i)
+    }
+    return this.Nombre(M)
   }
   getTodayTotalCA() {
     let CA = 0
@@ -384,11 +414,11 @@ export class AppComponent {
     this.disabled = true
     this.filtered_V = []
     let i = 0
-    this.ventes.forEach((m: any) => {
+    this.JVentes.forEach((m: any) => {
       i += 1
-      let day = m[0].date.substr(0, 2)
-      let month = m[0].date.substr(3, 2)
-      let year = m[0].date.substr(6, 4)
+      let day = m[0][0].date.substr(0, 2)
+      let month = m[0][0].date.substr(3, 2)
+      let year = m[0][0].date.substr(6, 4)
       let date = new Date(month + '-' + day + '-' + year)
       let debut = new Date(this.startDate)
       let fin = new Date(this.endDate)
@@ -404,7 +434,7 @@ export class AppComponent {
       if ((Debutdate <= date) && (date <= Findate))
         this.filtered_V.push(m)
     });
-this.ventes=this.filtered_V
+this.JVentes=this.filtered_V
     
   }
   GetVentes() {
@@ -414,6 +444,7 @@ this.ventes=this.filtered_V
       this.Ventes = [];
       this.Tventes = [];
       this.TVentes = [];
+      this.JVentes = [];
       data.forEach(element => {
         i += 1
         this.ventes.push({ ...element.payload.val() as {} })
@@ -429,6 +460,26 @@ this.ventes=this.filtered_V
         }
       })
       this.ventes.sort((a, b) => a < b ? 1 : 0);
+      let jour = this.ventes[0][0].date[0]+this.ventes[0][0].date[1]
+     let jVente = []
+      console.log(jour)
+      this.ventes.forEach(element => {
+        let date = element[0].date[0]+element[0].date[1]
+        if (date==jour){
+        jVente.push(element)       
+       }
+        else{
+          this.JVentes.push(jVente)
+          jour=date
+          jVente=[]
+          jVente.push(element)
+        }
+      });
+      this.JVentes.push(jVente)
+      console.log(this.JVentes) 
     })
+  }
+  getDate(ch : string){
+    return(ch.slice(0,10))
   }
 }
