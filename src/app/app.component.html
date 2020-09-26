@@ -628,21 +628,49 @@
       </mat-expansion-panel>
 
     </mat-accordion> -->
-    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <div fxLayout="row" fxLayoutAlign="space-between start" class="w-100">
 
     <mat-form-field>
       <input matInput type="password" [(ngModel)]="MDP">
     </mat-form-field>
-    <div *ngIf="MDP =='55413494'" fxLayout="row" fxLayoutGap="10px">
-      <div> Ventes :{{ventes.length}} </div>
-      <div> CA : {{getTotalCA()}} </div>
-      <div> Marge: {{getTotalMarge()}} </div>
-      
-    </div>
-    
+      <div *ngIf="MDP =='55413494'" > Ventes :{{ventes.length}} </div>
+      <div *ngIf="MDP =='55413494'" > CA : {{getTotalCA()}} </div>
+      <div *ngIf="MDP =='55413494'" > Marge: {{getTotalMarge()}} </div>
     </div>
   </mat-tab>
-  <mat-tab label="" disabled>Content 3</mat-tab>
+  <mat-tab label="Historique" >
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let article of active_articles  ; let j = index;">
+        <mat-expansion-panel-header [ngStyle]="SetColorHistorique(article,j)">
+          <mat-panel-title fxLayout="row" fxLayoutGap="20px" style="width :30%">
+            <p fxLayoutAlign="center">{{article.reference}} </p>
+            <p>
+              {{article.designation}} </p>
+          </mat-panel-title>
+          <mat-panel-description fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+              <p style="width: 100px;">Vente : {{getTotalArticleVendu(j)}}</p>
+              <p style="width: 100px;">Entrée : {{getTotalArticleEntree(article.key)}}</p>
+              <p style="width: 100px;">Sortie : {{getTotalArticleSorti(article.key)}}</p>  
+              <p style="width: 100px;">Reste : {{-getTotalArticleSorti(article.key)-getTotalArticleVendu(j)+getTotalArticleEntree(article.key)}}</p>            
+              <p style="width: 100px;">Stock : {{article.quantite}}</p>            
+
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-list>
+          <mat-list-item *ngFor="let jvente of JVentes  ; let k = index;">
+            <span fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+              <p style="width: 100px;">{{getDate(jvente[0][0].date)}}</p>
+              <p style="width: 100px;">Vente : {{getArticleVendu(j,k)}}</p>
+              <p style="width: 100px;">Entrée : {{getArticleEntree(article.key,k)}}</p>
+              <p style="width: 100px;">Sortie : {{getArticleSorti(article.key,k)}}</p>
+              <mat-divider></mat-divider>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-expansion-panel>
+  
+    </mat-accordion>
+  </mat-tab>
 </mat-tab-group>
 <style>
   cdk-row,

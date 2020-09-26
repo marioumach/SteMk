@@ -1,6 +1,7 @@
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatDividerModule} from '@angular/material/divider';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -80,9 +81,11 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatPaginatorModule,
     CommonModule,
     MatBadgeModule,
+    MatDividerModule
   ],
   exports: [
     MatBadgeModule,
+    MatDividerModule,
     FormsModule,
     ReactiveFormsModule,
     MatCheckboxModule,

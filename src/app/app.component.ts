@@ -47,20 +47,20 @@ export class AppComponent {
   options = { month: '2-digit', day: '2-digit', year: 'numeric' };
   dateTime = new Date()
   d1 = this.dateTime.getDate()
-  m1 = this.dateTime.getMonth()+1
+  m1 = this.dateTime.getMonth() + 1
   y1 = this.dateTime.getFullYear()
-  Y=  new Date(this.m1+'-'+this.d1+'-'+this.y1)
+  Y = new Date(this.m1 + '-' + this.d1 + '-' + this.y1)
   DateTime = this.Y.toLocaleDateString("en-US", this.options)
   Articles: any[];
-  Mouvements: any[];
+  Mouvements: any[] = [];
   active_articles: any[];
   articles_vente: any[];
   vente_caisse: any[];
   ventes: any[] = [];
   filtered_V: any[];
   Tventes: any[] = [];
-  JVentes : any[][]= []
-  TV : any[]=[] 
+  JVentes: any[][] = []
+  TV: any[] = []
   TVentes: any[] = [];
   Ventes: any[] = [];
   loading = false;
@@ -129,7 +129,6 @@ export class AppComponent {
 
   }
   SupprimerVente(v) {
-    console.log(this.Ventes[v])
     this.shareservice.deleteVente(this.Ventes[v])
   }
   Nombre(total): any {
@@ -231,6 +230,13 @@ export class AppComponent {
     const V = Object.values(v)
     return V
   }
+  Table(jvente) {
+    let v: any[]
+    let i = 0
+    v = jvente
+    const V = Object.values(v)
+    return V
+  }
   todayVente(j) {
     let v: any[]
     let i = 0
@@ -244,11 +250,9 @@ export class AppComponent {
       let item = this.getArticle(this.mouvement.article).quantite;
       if (this.mouvement.operation === "Entrée") {
         qte += item
-        console.log("entree", qte)
       }
       else {
         qte = item - qte
-        console.log("sortie", qte)
       }
       if (qte >= 0) {
         const obj = {
@@ -305,8 +309,7 @@ export class AppComponent {
       });
   }
   openSupprimeTodayVente(i, v): void {
-    console.log(i)
-    console.log(v)
+
     const dialogRef = this.dialog.open(DVenteComponent, {
       width: '600px',
       panelClass: 'app-full-bleed-dialog',
@@ -352,26 +355,27 @@ export class AppComponent {
   }
   getJourTotal(j) {
     let v: any[]
-    let s=0
-    this.JVentes[j].forEach((v : any) => {
+    let s = 0
+    this.JVentes[j].forEach((v: any) => {
       const V = Object.values(v)
-      s+= V.map((t : any) => t.prixUnit * t.quantite).reduce((acc, value) => acc + value, 0)
+      s += V.map((t: any) => t.prixUnit * t.quantite).reduce((acc, value) => acc + value, 0)
     });
-return s
+    return s
   }
   getJourMarge(j) {
     let v: any[]
-    let s=0
-    let a : any
-    this.JVentes[j].forEach((v : any) => {
+    let s = 0
+    let a: any
+    this.JVentes[j].forEach((v: any) => {
       const V = Object.values(v)
-      
-      s+= V.map((t : any) => {
-        a= this.getArticle(t.article).prixAchat
-        return ((t.prixUnit-a) * t.quantite)
+
+      s += V.map((t: any) => {
+        a = this.getArticle(t.article).prixAchat
+        return ((t.prixUnit - a) * t.quantite)
       }).reduce((acc, value) => acc + value, 0)
     });
-return s}
+    return s
+  }
   getTotalCA() {
     let CA = 0
     for (let i = 0; i < this.JVentes.length; i++) {
@@ -401,15 +405,14 @@ return s}
     this.articles.filter = filterValue.trim().toLowerCase();
   }
   FiltrerMouvement(filterValue: string) {
-    console.log(this.mouvements)
     this.mouvements.filter = filterValue.trim().toLowerCase();
   }
   Reset() {
     this.disabled = false
-    this.MDP=''
+    this.MDP = ''
     this.GetVentes()
-   }
-   
+  }
+
   FilterVentes() {
     this.disabled = true
     this.filtered_V = []
@@ -423,19 +426,19 @@ return s}
       let debut = new Date(this.startDate)
       let fin = new Date(this.endDate)
       let D1 = debut.getDate()
-      let M1 = debut.getMonth()+1
+      let M1 = debut.getMonth() + 1
       let Y1 = debut.getFullYear()
       let Debutdate = new Date(M1 + '-' + D1 + '-' + Y1)
-      let D2 = fin.getDate() 
-      let M2 = fin.getMonth()+1
+      let D2 = fin.getDate()
+      let M2 = fin.getMonth() + 1
       let Y2 = fin.getFullYear()
       let Findate = new Date(M2 + '-' + D2 + '-' + Y2)
 
       if ((Debutdate <= date) && (date <= Findate))
         this.filtered_V.push(m)
     });
-this.JVentes=this.filtered_V
-    
+    this.JVentes = this.filtered_V
+
   }
   GetVentes() {
     let i = 0
@@ -460,26 +463,103 @@ this.JVentes=this.filtered_V
         }
       })
       this.ventes.sort((a, b) => a < b ? 1 : 0);
-      let jour = this.ventes[0][0].date[0]+this.ventes[0][0].date[1]
-     let jVente = []
-      console.log(jour)
+      let jour = this.ventes[0][0].date[0] + this.ventes[0][0].date[1]
+      let jVente = []
       this.ventes.forEach(element => {
-        let date = element[0].date[0]+element[0].date[1]
-        if (date==jour){
-        jVente.push(element)       
-       }
-        else{
+        let date = element[0].date[0] + element[0].date[1]
+        if (date == jour) {
+          jVente.push(element)
+        }
+        else {
           this.JVentes.push(jVente)
-          jour=date
-          jVente=[]
+          jour = date
+          jVente = []
           jVente.push(element)
         }
       });
       this.JVentes.push(jVente)
-      console.log(this.JVentes) 
     })
   }
-  getDate(ch : string){
-    return(ch.slice(0,10))
+  getDate(ch: string) {
+    return (ch.slice(0, 10))
+  }
+  getArticleVendu(j, k: any) {
+    let qte = 0
+    this.JVentes[k].forEach((jvente: any[]) => {
+      this.Table(jvente).forEach(vente => {
+        if (vente.article == this.active_articles[j].key)
+          qte += vente.quantite
+      });
+    });
+    return qte
+  }
+  getArticleSorti(j, k: any) {
+    let qte = 0
+    this.Mouvements.forEach(mouvement => {
+      let year = mouvement.date.substr(0, 4)
+      let day
+      let month
+      day = mouvement.date.substr(8, 2)
+      month = mouvement.date.substr(5, 2)
+      let date = day + '/' + month + '/' + year
+      if (this.getDate(this.JVentes[k][0][0].date) === date) {
+        if (j == mouvement.article && mouvement.operation == 'Sortie') {
+          qte += mouvement.quantite
+        }
+      }
+    });
+    return qte
+  }
+
+  getTotalArticleSorti(j: any) {
+    let qte = 0
+    this.Mouvements.forEach(mouvement => {
+      if (j == mouvement.article && mouvement.operation == 'Sortie')
+        qte += mouvement.quantite
+
+    });
+    return qte
+  }
+  getTotalArticleVendu(j: any) {
+    let qte = 0
+    let k = -1
+    this.JVentes.forEach(J => {
+      k++
+      qte += this.getArticleVendu(j, k)
+    });
+    return qte
+  }
+  getArticleEntree(j, k: any) {
+    let qte = 0
+    this.Mouvements.forEach(mouvement => {
+      let year = mouvement.date.substr(0, 4)
+      let day
+      let month
+      day = mouvement.date.substr(8, 2)
+      month = mouvement.date.substr(5, 2)
+      let date = day + '/' + month + '/' + year
+      if (this.getDate(this.JVentes[k][0][0].date) === date) {
+        if (j == mouvement.article && mouvement.operation == 'Entrée') {
+          qte += mouvement.quantite
+        }
+      }
+    });
+    return qte
+  }
+
+  getTotalArticleEntree(j: any) {
+    let qte = 0
+    this.Mouvements.forEach(mouvement => {
+      if (j == mouvement.article && mouvement.operation == 'Entrée')
+        qte += mouvement.quantite
+
+    });
+    return qte
+  }
+  SetColorHistorique(item,j) {
+    let reste = this.getTotalArticleEntree(item.key)-this.getTotalArticleVendu(j)-this.getTotalArticleSorti(item.key)
+    if (reste != item.quantite) {
+        return { "background-color": '#EABDA8' }
+    }
   }
 }
