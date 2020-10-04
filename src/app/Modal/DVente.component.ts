@@ -38,6 +38,7 @@ export class DVenteComponent implements OnInit {
 
             this.shareService.deleteVente(this.key).then(()=>{
                 this.Articles.forEach(article => {
+                
                     this.shareService.updateArticleQte(article.key,article.qteA+article.qteV)
                 });
                 this.shareService.showMsg("Vente supprimée avec succès");

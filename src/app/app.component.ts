@@ -43,6 +43,7 @@ export class AppComponent {
   Article_columns: string[] = ['reference', 'designation', 'stockMin', 'quantite', 'Palette', 'prixAchat', 'prixVente', 'dateAjout', 'actions'];
   Stock_columns: string[] = ['reference', 'designation', 'date', 'operation', 'acteur', 'quantité', 'prix', 'valeur', 'actions']
   stock: any;
+  Historique:any
   dataSource = [];
   options = { month: '2-digit', day: '2-digit', year: 'numeric' };
   dateTime = new Date()
@@ -245,15 +246,17 @@ export class AppComponent {
     return V
   }
   AjoutMouvement() {
-    let qte = this.mouvement.quantite;
+    let i =this.active_articles.findIndex(i => i.key ===this.mouvement.article );
+    let qte = this.getReste(this.getArticle(this.mouvement.article),i)
     if (this.isValidInventaire === false) {
       let item = this.getArticle(this.mouvement.article).quantite;
       if (this.mouvement.operation === "Entrée") {
-        qte += item
+        qte = qte + this.mouvement.quantite
       }
       else {
-        qte = item - qte
-      }
+        qte = qte - this.mouvement.quantite
+       }
+  
       if (qte >= 0) {
         const obj = {
           operation: this.mouvement.operation,
@@ -264,11 +267,15 @@ export class AppComponent {
           prix: this.getArticle(this.mouvement.article).prixAchat
         }
         this.shareservice.addMouvement(obj).then(() => {
-          this.shareservice.updateArticleQte(obj.article, qte)
-          this.shareservice.showMsg("Mouvement ajouté avec succès");
-        })
-          .catch(error => {
-            this.shareservice.showMsg(error.message);
+          this.shareservice.updateArticleQte(obj.article, qte).then(()=>{
+            this.shareservice.showMsg("Mouvement ajouté avec succès");
+          }).catch(error=>{
+            this.shareservice.showMsg("Erreur Modifier quantite article");
+
+          })
+        }) .catch(error => {
+          this.shareservice.showMsg("Erreur Ajouter Mouvement");
+          this.shareservice.showMsg(error.message);
           });
       }
       else {
@@ -293,17 +300,18 @@ export class AppComponent {
 
     this.shareservice.addVente(this.dataSource).then(() => {
       this.dataSource.forEach((element) => {
-        let qte = element.quantite
-        let item = this.getArticle(element.article).quantite;
-        qte = item - qte
-        this.shareservice.updateArticleQte(element.article, qte)
+        let i =this.active_articles.findIndex(i => i.key === element.article );
+        let qte = this.getReste(this.getArticle(element.article),i)
+        this.shareservice.updateArticleQte(element.article, qte).catch(erreur=>{
+          this.shareservice.showMsg("erreur Modififer quantite article")
+        })
       });
       this.dataSource = []
       this.loading = false;
     })
       .catch(error => {
         console.error(error.message);
-        this.shareservice.showMsg("Une erreur s'est produite");
+        this.shareservice.showMsg("Erreur Passer vente");
         this.loading = false;
 
       });
@@ -557,9 +565,13 @@ export class AppComponent {
     return qte
   }
   SetColorHistorique(item,j) {
-    let reste = this.getTotalArticleEntree(item.key)-this.getTotalArticleVendu(j)-this.getTotalArticleSorti(item.key)
-    if (reste != item.quantite) {
+    if (this.getReste(item,j) != item.quantite) {
         return { "background-color": '#EABDA8' }
     }
   }
+  getReste(item,j){
+    return  this.getTotalArticleEntree(item.key)-this.getTotalArticleVendu(j)-this.getTotalArticleSorti(item.key)
+
+  }
+  
 }

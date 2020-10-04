@@ -639,7 +639,8 @@
     </div>
   </mat-tab>
   <mat-tab label="Historique" >
-    <mat-accordion>
+
+    <mat-accordion *ngIf="Historique=='stemk55413494'">
       <mat-expansion-panel *ngFor="let article of active_articles  ; let j = index;">
         <mat-expansion-panel-header [ngStyle]="SetColorHistorique(article,j)">
           <mat-panel-title fxLayout="row" fxLayoutGap="20px" style="width :30%">
@@ -651,7 +652,7 @@
               <p style="width: 100px;">Vente : {{getTotalArticleVendu(j)}}</p>
               <p style="width: 100px;">Entrée : {{getTotalArticleEntree(article.key)}}</p>
               <p style="width: 100px;">Sortie : {{getTotalArticleSorti(article.key)}}</p>  
-              <p style="width: 100px;">Reste : {{-getTotalArticleSorti(article.key)-getTotalArticleVendu(j)+getTotalArticleEntree(article.key)}}</p>            
+              <p style="width: 100px;">Reste : {{getReste(article,j)}}</p>            
               <p style="width: 100px;">Stock : {{article.quantite}}</p>            
 
           </mat-panel-description>
@@ -670,6 +671,9 @@
       </mat-expansion-panel>
   
     </mat-accordion>
+    <mat-form-field>
+      <input matInput type="password" [(ngModel)]="Historique">
+    </mat-form-field>
   </mat-tab>
 </mat-tab-group>
 <style>
