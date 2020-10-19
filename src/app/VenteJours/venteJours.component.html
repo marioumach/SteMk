@@ -1,0 +1,132 @@
+<div class="w-100" fxLayout="column">
+
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let vente of Tventes ; let j = index;">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span>Vente N° {{j+1}} </span>
+          </mat-panel-title>
+          <mat-panel-description fxLayoutAlign="space-between center">
+            <span>
+              {{vente[0].date}} </span>
+            <span>
+              Total : {{Nombre(getTodayTotal(j))}}
+            </span>
+            <button (click)="openSupprimeTodayVente(j,vente)" mat-button>
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div style=" background-color:white ;
+      height: 100%; width: 100%; border-radius: 5px; margin-top: 15px;" fxLayout="column" fxLayoutGap="15px"
+          fxLayoutAlign="start center">
+
+          <cdk-table [dataSource]="todayVente(j)" class="example-table">
+
+            <!-- Position Column -->
+            <ng-container cdkColumnDef="Qte">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Qte </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element"> {{element.quantite}} </cdk-cell>
+
+            </ng-container>
+
+            <!-- Article Column -->
+            <ng-container cdkColumnDef="Article">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Article </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element"> {{getArticle(element.article).designation}} </cdk-cell>
+
+            </ng-container>
+
+            <!-- PU Column -->
+            <ng-container cdkColumnDef="PU">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> P.U </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element">{{Nombre(element.prixUnit)}} </cdk-cell>
+
+            </ng-container>
+
+            <!-- Total Column -->
+            <ng-container cdkColumnDef="Total">
+              <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Total </cdk-header-cell>
+              <cdk-cell *cdkCellDef="let element">{{Nombre(element.quantite*element.prixUnit)}} </cdk-cell>
+
+            </ng-container>
+
+            <cdk-header-row class="example-header-row" *cdkHeaderRowDef="Vente"></cdk-header-row>
+            <cdk-row class="example-row" *cdkRowDef="let row; columns: Vente;"></cdk-row>
+          </cdk-table>
+
+        </div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+    <div>
+      Chiffre d'affaire = {{getTodayTotalCA()}}
+    </div>
+</div>
+<style>
+    cdk-row,
+    cdk-header-row,
+    cdk-footer-row {
+      display: flex;
+    }
+  
+    cdk-cell,
+    cdk-header-cell,
+    cdk-footer-cell {
+      flex: 1;
+    }
+  
+    .example-row {
+      height: 40px;
+    }
+  
+    .item {
+      position: relative;
+      padding-top: 5px;
+      display: inline-block;
+    }
+  
+    .notify-badge {
+      position: absolute;
+      right: 40%;
+      margin-top: -20px;
+      top: 10px;
+      background: #3f51b5;
+      text-align: center;
+      border-radius: 30px 30px 30px 30px;
+      color: white;
+      padding: 0px 15px;
+    }
+  
+    .notify-badge1 {
+      position: absolute;
+      right: 30%;
+      margin-top: -20px;
+      top: 10px;
+      background: #3f51b5;
+      text-align: center;
+      border-radius: 30px 30px 30px 30px;
+      color: white;
+      padding: 0px 15px;
+    }
+  
+    .w-50 {
+      max-width: 50px;
+    }
+  
+    .w-75 {
+      max-width: 75px;
+    }
+  
+    .w-40 {
+      max-width: 40px;
+    }
+  
+    .w-120 {
+      max-width: 120px;
+    }
+  
+    .w-60 {
+      max-width: 60px;
+    }
+  </style>

@@ -34,10 +34,32 @@ import { environment } from 'src/environments/environment';
 
 //Services
 import { ShareService } from "src/services/share.service";
+import { VentesComponent } from "src/app/Ventes/ventes.component";
+import { ArticlesComponent} from "src/app/Articles/articles.component";
+import { CaisseComponent } from "src/app/Caisse/caisse.component";
+import { HistoriqueComponent } from "src/app/Historique/historique.component";
+import { MouvementsComponent } from "src/app/Mouvements/mouvements.component";
+import { NavBarComponent } from "src/app/NavBar/navbar.component";
+import { VenteJoursComponent } from "src/app/VenteJours/venteJours.component";
+
+import { VentesService } from "src/app/Ventes/ventes.service";
+import { CaisseService } from "src/app/Caisse/caisse.service";
+import { HistoriqueService } from "src/app/Historique/historique.service";
+import { MouvementsService } from "src/app/Mouvements/mouvements.service";
+import { NavBarService } from "src/app/NavBar/navbar.service";
+import { VenteJoursService } from "src/app/VenteJours/venteJours.service";
+
 
 @NgModule({
 
   declarations: [
+    VentesComponent,
+    ArticlesComponent,
+    CaisseComponent,
+    HistoriqueComponent,
+    MouvementsComponent,
+    NavBarComponent,
+    VenteJoursComponent,
     AppComponent,
     CalculeComponent,
     DArticleComponent,
@@ -64,7 +86,14 @@ import { ShareService } from "src/services/share.service";
     HttpClientModule,
 
   ],
-  providers: [ShareService, { provide: BUCKET, useValue: 'stemk-4bf9d.appspot.com' } ],
+  providers: [ShareService,
+    VentesService,
+    CaisseService,
+    HistoriqueService,
+    MouvementsService,
+    NavBarService,
+    VenteJoursService,
+    , { provide: BUCKET, useValue: 'stemk-4bf9d.appspot.com' } ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

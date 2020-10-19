@@ -2,6 +2,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatDividerModule} from '@angular/material/divider';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -40,6 +41,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   imports: [
+    FontAwesomeModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -84,6 +86,7 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatDividerModule
   ],
   exports: [
+    FontAwesomeModule,
     MatBadgeModule,
     MatDividerModule,
     FormsModule,

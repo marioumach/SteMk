@@ -1,0 +1,161 @@
+<div class="h-100">
+    <div class="container-fluid w-100 h-100" style=" background-color:#757575 ;">
+        <div class="main row" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around start"
+            style=" background-color:#757575 ;">
+            <!-- Liste des Articles -->
+            <div class="col-sm-4 col-md-8 row " style=" background-color:#757575 ;">
+                <div class="col-sm-4 col-md-3 article" *ngFor="let article of active_articles">
+                    <mat-card class="example-card">
+                        <mat-card-header style="height: 50px;" fxLayout="column" fxLayoutAlign="center center">
+                            <h5 style=" margin: 0 !important;"> {{article.designation}}</h5>
+                            <span class="notify-badge">{{article.prixVente}}</span>
+                        </mat-card-header>
+                        <mat-card-content class="item w-100 h-100">
+                            <button class="w-100" mat-button (click)="openCalculatrice(article)">
+                                <img mat-card-image
+                                    [src]="article.image==''?'../../assets/images/Bouteille.png':article.image"
+                                    style="margin-top: 0;" width="100%" height="100px">
+                            </button>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+            <!-- Tableau de Caisse -->
+            <div class="col-md-4" style=" background-color:white ;
+        height: 100%;  border-radius: 5px; margin-top: 15px;" fxLayout="column" fxLayoutGap="15px"
+                fxLayoutAlign="start center">
+                <div></div>
+                <span class="notify-badge">Vente n°{{l+1}}</span>
+
+                <cdk-table [dataSource]="dataSource" class="example-table">
+                    <ng-container cdkColumnDef="action">
+                        <cdk-header-cell [ngClass]="'w-40'" class="example-header-cell" *cdkHeaderCellDef>
+                        </cdk-header-cell>
+                        <cdk-cell [ngClass]="'w-40'" *cdkCellDef="let element ;  let j = index;">
+                            <mat-icon aria-hidden="false" (click)="supprimer(j)">clear</mat-icon>
+                        </cdk-cell>
+                        <cdk-footer-cell [ngClass]="'w-40'" *cdkFooterCellDef>Total</cdk-footer-cell>
+                    </ng-container>
+                    <!-- Article Column -->
+                    <ng-container cdkColumnDef="Article">
+                        <cdk-header-cell class="example-header-cell" *cdkHeaderCellDef> Article </cdk-header-cell>
+                        <cdk-cell *cdkCellDef="let element"> {{getArticle(element.article).designation}} </cdk-cell>
+                        <cdk-footer-cell *cdkFooterCellDef></cdk-footer-cell>
+
+                    </ng-container>
+                    <!-- Position Column -->
+                    <ng-container cdkColumnDef="Qte">
+                        <cdk-header-cell [ngClass]="'w-40'" class="example-header-cell" *cdkHeaderCellDef> Qte
+                        </cdk-header-cell>
+                        <cdk-cell [ngClass]="'w-40'" *cdkCellDef="let element"> {{element.quantite}} </cdk-cell>
+                        <cdk-footer-cell [ngClass]="'w-40'" *cdkFooterCellDef></cdk-footer-cell>
+
+                    </ng-container>
+
+                    <!-- PU Column -->
+                    <ng-container cdkColumnDef="PU">
+                        <cdk-header-cell [ngClass]="'w-50'" class="example-header-cell" *cdkHeaderCellDef> P.U
+                        </cdk-header-cell>
+                        <cdk-cell [ngClass]="'w-50'" *cdkCellDef="let element">{{Nombre(element.prixUnit)}} </cdk-cell>
+                        <cdk-footer-cell [ngClass]="'w-50'" *cdkFooterCellDef></cdk-footer-cell>
+
+                    </ng-container>
+
+                    <!-- Total Column -->
+                    <ng-container cdkColumnDef="Total">
+                        <cdk-header-cell [ngClass]="'w-75'" class="example-header-cell" *cdkHeaderCellDef> Total
+                        </cdk-header-cell>
+                        <cdk-cell [ngClass]="'w-75'" *cdkCellDef="let element">
+                            {{Nombre(element.quantite*element.prixUnit)}}
+                        </cdk-cell>
+                        <cdk-footer-cell [ngClass]="'w-75'" *cdkFooterCellDef>{{Nombre(getTotalprix())}}
+                        </cdk-footer-cell>
+
+                    </ng-container>
+
+                    <cdk-header-row class="example-header-row" *cdkHeaderRowDef="Article_Caisse"></cdk-header-row>
+                    <cdk-row class="example-row" *cdkRowDef="let row; columns: Article_Caisse;"></cdk-row>
+                    <cdk-footer-row *cdkFooterRowDef="Article_Caisse"></cdk-footer-row>
+                </cdk-table>
+
+                <div class="w-100" style="padding: 10px !important;" fxLayout="row" fxLayoutAlign="space-between start">
+                    <button mat-raised-button (click)="annuler()" class="operation"
+                        [disabled]="loading">Annuler</button>
+                    <button mat-raised-button color="primary" (click)="passer()" class="operation"
+                        [disabled]="loading || isValidVente">
+                        {{loading?'Loading..':'Passer'}}</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+  cdk-row,
+  cdk-header-row,
+  cdk-footer-row {
+    display: flex;
+  }
+
+  cdk-cell,
+  cdk-header-cell,
+  cdk-footer-cell {
+    flex: 1;
+  }
+
+  .example-row {
+    height: 40px;
+  }
+
+  .item {
+    position: relative;
+    padding-top: 5px;
+    display: inline-block;
+  }
+
+  .notify-badge {
+    position: absolute;
+    right: 40%;
+    margin-top: -20px;
+    top: 10px;
+    background: #3f51b5;
+    text-align: center;
+    border-radius: 30px 30px 30px 30px;
+    color: white;
+    padding: 0px 15px;
+  }
+
+  .notify-badge1 {
+    position: absolute;
+    right: 30%;
+    margin-top: -20px;
+    top: 10px;
+    background: #3f51b5;
+    text-align: center;
+    border-radius: 30px 30px 30px 30px;
+    color: white;
+    padding: 0px 15px;
+  }
+
+  .w-50 {
+    max-width: 50px;
+  }
+
+  .w-75 {
+    max-width: 75px;
+  }
+
+  .w-40 {
+    max-width: 40px;
+  }
+
+  .w-120 {
+    max-width: 120px;
+  }
+
+  .w-60 {
+    max-width: 60px;
+  }
+
+</style>

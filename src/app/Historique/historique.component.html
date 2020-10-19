@@ -1,0 +1,34 @@
+<mat-accordion *ngIf="Historique=='stemk55413494'">
+    <mat-expansion-panel *ngFor="let article of active_articles  ; let j = index;">
+      <mat-expansion-panel-header [ngStyle]="SetColorHistorique(article,j)">
+        <mat-panel-title fxLayout="row" fxLayoutGap="20px" style="width :30%">
+          <p fxLayoutAlign="center">{{article.reference}} </p>
+          <p>
+            {{article.designation}} </p>
+        </mat-panel-title>
+        <mat-panel-description fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+            <p style="width: 100px;">Vente : {{getTotalArticleVendu(j)}}</p>
+            <p style="width: 100px;">Entrée : {{getTotalArticleEntree(article.key)}}</p>
+            <p style="width: 100px;">Sortie : {{getTotalArticleSorti(article.key)}}</p>  
+            <p style="width: 100px;">Reste : {{getReste(article,j)}}</p>            
+            <p style="width: 100px;">Stock : {{article.quantite}}</p>            
+
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <mat-list-item *ngFor="let jvente of JVentes  ; let k = index;">
+          <span fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+            <p style="width: 100px;">{{getDate(jvente[0][0].date)}}</p>
+            <p style="width: 100px;">Vente : {{getArticleVendu(j,k)}}</p>
+            <p style="width: 100px;">Entrée : {{getArticleEntree(article.key,k)}}</p>
+            <p style="width: 100px;">Sortie : {{getArticleSorti(article.key,k)}}</p>
+            <mat-divider></mat-divider>
+          </span>
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+  <mat-form-field>
+    <input matInput type="password" [(ngModel)]="Historique">
+  </mat-form-field>

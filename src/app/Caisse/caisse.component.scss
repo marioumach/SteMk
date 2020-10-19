@@ -1,0 +1,39 @@
+mat-card{
+  margin-top: 15px;
+  padding: 15px 5px 5px 5px;
+}
+.article{
+padding-right: 0px !important;
+}
+.example-table {
+  background-color: white;
+  flex: 1 1 auto;
+  overflow: auto;
+  width: 100%;
+}
+
+.example-header-row, .example-row {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  align-items: center;
+  height: 32px;
+  padding: 0 8px;
+}
+
+.example-row {
+  cursor: pointer;
+}
+
+.example-cell, .example-header-cell {
+  flex: 1;
+}
+
+.example-header-cell {
+  font-size: 12px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.54);
+}
+body{
+  background-color:#757575 ;
+}
+

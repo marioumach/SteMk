@@ -17,11 +17,13 @@ export class ShareService {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         return new Promise((resolve, reject) => {
             const articles = this.getArticles().subscribe((articles) => {
-                const mouvements = this.getArticles().subscribe((mouvements) => {
+                const activeArticles = this.getActiveArticles().subscribe((activeArticles) => {
+                const mouvements = this.getMouvements().subscribe((mouvements) => {
                     const ventes = this.getVentes().subscribe((ventes) => {
 
                 const obj = {
                     articles: articles,
+                    activeArticles:activeArticles,
                     mouvements:mouvements,
                     ventes : ventes
                 };
@@ -29,6 +31,7 @@ export class ShareService {
 
             })
         })
+    })
         })
         })
     } 

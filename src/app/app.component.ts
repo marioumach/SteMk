@@ -41,7 +41,7 @@ export class AppComponent {
   CA: any
   Article_Caisse: string[] = ['action', 'Article', 'Qte', 'PU', 'Total'];
   Article_columns: string[] = ['reference', 'designation', 'stockMin', 'quantite', 'Palette', 'prixAchat', 'prixVente', 'dateAjout', 'actions'];
-  Stock_columns: string[] = ['reference', 'designation', 'date', 'operation', 'acteur', 'quantité', 'prix', 'valeur', 'actions']
+  Stock_columns: string[] = ['reference' , 'designation', 'date', 'operation', 'acteur', 'quantité', 'prix', 'valeur', 'actions']
   stock: any;
   Historique:any
   dataSource = [];

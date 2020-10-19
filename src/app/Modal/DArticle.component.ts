@@ -26,7 +26,7 @@ export class DArticleComponent implements OnInit {
               .catch(error => {
                 this.shareService.showMsg(error.message)
               })
-              this.dialogRef.close();
+              this.dialogRef.close(this.article.key);
 
         }
         else {

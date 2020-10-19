@@ -1,0 +1,31 @@
+
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#3f51b5 ;">
+    <a class="navbar-brand" fxLayoutGap="7px" ><fa-icon [icon]="faWineBottle"></fa-icon> <span class="nav-label">SteMK</span></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto" fxLayoutGap="30px">
+        <li class="nav-item">
+          <a routerLink="/caisse" routerLinkActive="active" class="nav-link" fxLayoutGap="7px" >
+            <fa-icon [icon]="faCoins"></fa-icon> <span class="nav-label">Caisse</span></a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/mouvements" routerLinkActive="active" class="nav-link" fxLayoutGap="7px" ><fa-icon [icon]="faSync"></fa-icon> <span class="nav-label">Mouvements</span></a>
+        </li>
+        <li class="nav-item">
+            <a routerLink="/articles" routerLinkActive="active" class="nav-link" fxLayoutGap="7px" ><fa-icon [icon]="faTh"></fa-icon> <span class="nav-label">Articles</span></a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/vente-jours" routerLinkActive="active" class="nav-link" fxLayoutGap="7px" ><fa-icon [icon]="faList"></fa-icon> <span class="nav-label">Vente du Jours</span></a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/ventes" routerLinkActive="active" class="nav-link" fxLayoutGap="7px"><fa-icon [icon]="faCalendarDay"></fa-icon> <span class="nav-label">Ventes</span></a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/historique" routerLinkActive="active" class="nav-link" fxLayoutGap="7px"><fa-icon [icon]="faHistory"></fa-icon> <span class="nav-label">Historique</span></a>
+          </li>
+          </ul>
+    </div>
+  </nav>

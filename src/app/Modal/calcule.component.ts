@@ -21,9 +21,7 @@ export class CalculeComponent {
     @Inject(MAT_DIALOG_DATA) public data: DialogData ,
     private shareService: ShareService ) {
       this.article = data.article
-      console.log(this.article)
       this.PU = this.article.prixVente
-      console.log(this.PU)
      }
 
 //   onTouche(event: KeyboardEvent): void {
@@ -34,11 +32,9 @@ export class CalculeComponent {
 //   }
   onDelete(): void {
     this.mainText = Number(this.mainText.toString().slice(0, -1))
-    console.log(this.mainText)
   }
   passer(): void {
     if (this.PU > this.article.prixAchat) {
-    console.log(this.mainText)
     if(this.mainText===0){
       this.mainText=1
     }
