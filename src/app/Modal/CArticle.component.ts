@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Validators, FormControl } from '@angular/forms';
+import { TransitionCheckState } from '@angular/material/checkbox';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ShareService } from 'src/services/share.service';
 
@@ -19,6 +20,7 @@ export class CArticleComponent implements OnInit {
     prixVente = new FormControl('', Validators.required);
     dateAjout = new FormControl('', Validators.required);
     codeVerif = new FormControl('', Validators.required);
+    type = new FormControl('', Validators.required);
     selectedItem: string = '';
     articleImage: any ;
  
@@ -37,7 +39,7 @@ export class CArticleComponent implements OnInit {
     get isValid(): boolean {
         return this.designation.invalid || this.stockMin.invalid
             || this.stockInit.invalid || this.prixVente.invalid || this.prixVente.invalid
-            || this.dateAjout.invalid || this.codeVerif.invalid
+            || this.dateAjout.invalid || this.codeVerif.invalid || this.type.invalid
     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -46,6 +48,7 @@ export class CArticleComponent implements OnInit {
 
 
     ajoutArticle() {
+        console.log(this.type.value)
         if (this.codeVerif.value === this.password) {
             if(this.prixVente.value<=this.prixAchat.value){
                 this.shareService.showMsg("Le prix de vente doit être supérieur au prix d'achat");
@@ -60,6 +63,7 @@ export class CArticleComponent implements OnInit {
                 prixAchat: Number(this.prixAchat.value),
                 prixVente: Number(this.prixVente.value),
                 dateAjout: this.dateAjout.value,
+                type: this.type.value ,
                 image :"",
                 active : true
             }

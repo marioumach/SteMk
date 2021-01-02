@@ -3,9 +3,14 @@
         <div class="main row" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around start"
             style=" background-color:#757575 ;">
             <!-- Liste des Articles -->
-            <div class="col-sm-4 col-md-8 row " style=" background-color:#757575 ;">
-                <div class="col-sm-4 col-md-3 article" *ngFor="let article of active_articles">
-                    <mat-card class="example-card">
+            <div class="col-sm-4 col-md-8" style=" background-color:#757575 ;">
+                
+                  <mat-tab-group style="margin-top: 10px;" [backgroundColor]="'primary'" >
+                    <mat-tab label="Eaux"  > 
+                    <div class="row">
+                      <div class="col-sm-4 col-md-3 article"   *ngFor="let article of active_articles | filterEaux" >
+                   
+                      <mat-card class="example-card">
                         <mat-card-header style="height: 50px;" fxLayout="column" fxLayoutAlign="center center">
                             <h5 style=" margin: 0 !important;"> {{article.designation}}</h5>
                             <span class="notify-badge">{{article.prixVente}}</span>
@@ -17,8 +22,27 @@
                                     style="margin-top: 0;" width="100%" height="100px">
                             </button>
                         </mat-card-content>
-                    </mat-card>
-                </div>
+                    </mat-card></div></div>
+                   </mat-tab>
+                    <mat-tab label="Autre" >
+                      <div class="row">
+                        <div class="col-sm-4 col-md-3 article"   *ngFor="let article of active_articles | filterAutre" >
+                     
+                        <mat-card class="example-card">
+                          <mat-card-header style="height: 50px;" fxLayout="column" fxLayoutAlign="center center">
+                              <h5 style=" margin: 0 !important;"> {{article.designation}}</h5>
+                              <span class="notify-badge">{{article.prixVente}}</span>
+                          </mat-card-header>
+                          <mat-card-content class="item w-100 h-100">
+                              <button class="w-100" mat-button (click)="openCalculatrice(article)">
+                                  <img mat-card-image
+                                      [src]="article.image==''?'../../assets/images/Bouteille.png':article.image"
+                                      style="margin-top: 0;" width="100%" height="100px">
+                              </button>
+                          </mat-card-content>
+                      </mat-card></div></div></mat-tab>
+                  </mat-tab-group>
+             
             </div>
             <!-- Tableau de Caisse -->
             <div class="col-md-4" style=" background-color:white ;
@@ -85,7 +109,16 @@
                         [disabled]="loading || isValidVente">
                         {{loading?'Loading..':'Passer'}}</button>
                 </div>
-
+                <div class="w-100" fxLayoutGap="5px" fxLayout="row" fxLayoutAlign="space-between center">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Montant</mat-label>
+                    <input type="number" min="1000" [(ngModel)]="Montant" matInput>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{Nombre(getRendu())}}</mat-label>
+                    <input type="number" min="1000" disabled matInput>
+                  </mat-form-field>
+                </div>
 
             </div>
         </div>

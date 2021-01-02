@@ -1,5 +1,5 @@
 import { Component, Inject, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+/*import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CalculeComponent } from './Modal/calcule.component';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { DMouvementComponent } from './Modal/DMouvement.component';
 import { MatSort } from '@angular/material/sort';
 import { DVenteComponent } from './Modal/DVente.component';
-import { EchangeComponent } from './Modal/echange.component';
+import { EchangeComponent } from './Modal/echange.component';*/
 
 export interface Article {
   reference: string;
@@ -30,7 +30,7 @@ export interface Article {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild('sortM') sortM: MatSort;
+ /* @ViewChild('sortM') sortM: MatSort;
   @ViewChild('sortA') sortA: MatSort;
 
   items: Observable<any[]>;
@@ -470,24 +470,27 @@ export class AppComponent {
           this.TVentes.push(element.key)
         }
       })
-      this.ventes.sort((a, b) => a < b ? 1 : 0);
-      let jour = this.ventes[0][0].date[0] + this.ventes[0][0].date[1]
-      let jVente = []
-      this.ventes.forEach(element => {
-        let date = element[0].date[0] + element[0].date[1]
-        if (date == jour) {
-          jVente.push(element)
-        }
-        else {
-          this.JVentes.push(jVente)
-          jour = date
-          jVente = []
-          jVente.push(element)
-        }
-      });
-      this.JVentes.push(jVente)
-    })
-  }
+      if (this.ventes.length>0){        this.ventes.sort((a, b) => a < b ? 1 : 0);
+        let jour = this.ventes[0][0].date[0] + this.ventes[0][0].date[1]
+        let jVente = []
+        this.ventes.forEach(element => {
+            let date = element[0].date[0] + element[0].date[1]
+            if (date == jour) {
+                jVente.push(element)
+            }
+            else {
+                this.JVentes.push(jVente)
+                jour = date
+                jVente = []
+                jVente.push(element)
+            }
+        });
+        this.JVentes.push(jVente)
+        this.l=this.TVentes.length
+    
+}})
+   
+}
   getDate(ch: string) {
     return (ch.slice(0, 10))
   }
@@ -572,6 +575,6 @@ export class AppComponent {
   getReste(item,j){
     return  this.getTotalArticleEntree(item.key)-this.getTotalArticleVendu(j)-this.getTotalArticleSorti(item.key)
 
-  }
+  }*/
   
 }

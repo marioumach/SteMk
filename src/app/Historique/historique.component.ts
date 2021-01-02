@@ -107,23 +107,27 @@ export class HistoriqueComponent implements OnInit {
                     this.TVentes.push(element.key)
                 }
             })
-            this.ventes.sort((a, b) => a < b ? 1 : 0);
-            let jour = this.ventes[0][0].date[0] + this.ventes[0][0].date[1]
-            let jVente = []
-            this.ventes.forEach(element => {
-                let date = element[0].date[0] + element[0].date[1]
-                if (date == jour) {
-                    jVente.push(element)
-                }
-                else {
-                    this.JVentes.push(jVente)
-                    jour = date
-                    jVente = []
-                    jVente.push(element)
-                }
-            });
-            this.JVentes.push(jVente)
-            this.l=this.TVentes.length
+            if (this.ventes.length>0){        this.ventes.sort((a, b) => a < b ? 1 : 0);
+              let jour = this.ventes[0][0].date[0] + this.ventes[0][0].date[1]
+              let jVente = []
+              this.ventes.forEach(element => {
+                  let date = element[0].date[0] + element[0].date[1]
+                  if (date == jour) {
+                      jVente.push(element)
+                  }
+                  else {
+                      this.JVentes.push(jVente)
+                      jour = date
+                      jVente = []
+                      jVente.push(element)
+                  }
+              });
+            
+              this.JVentes.push(jVente)
+              this.l=this.TVentes.length  
+      }
+      else
+      {this.l=0}
         
     }
     update(){

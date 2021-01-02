@@ -24,6 +24,7 @@ export class UArticleComponent implements OnInit {
             this.article.prixAchat=data.prixAchat;
             this.article.prixVente=data.prixVente;
             this.article.dateAjout=data.dateAjout;
+            this.article.type=data.type
             this.article.image = data.image
            this.key = data.key
 
@@ -56,6 +57,7 @@ export class UArticleComponent implements OnInit {
                 prixAchat: Number(this.article.prixAchat),
                 prixVente: Number(this.article.prixVente),
                 dateAjout: this.article.dateAjout,
+                type:this.article.type,
                 image : this.article.image
             }
             this.shareService.UpdateArticle(obj,this.key).then(() => {

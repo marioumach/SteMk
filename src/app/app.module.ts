@@ -48,11 +48,14 @@ import { HistoriqueService } from "src/app/Historique/historique.service";
 import { MouvementsService } from "src/app/Mouvements/mouvements.service";
 import { NavBarService } from "src/app/NavBar/navbar.service";
 import { VenteJoursService } from "src/app/VenteJours/venteJours.service";
+import { FilterEauxPipe } from './filter-eaux.pipe';
+import { FilterAutrePipe } from './filter-autre.pipe';
 
 
 @NgModule({
 
   declarations: [
+ 
     VentesComponent,
     ArticlesComponent,
     CaisseComponent,
@@ -67,7 +70,9 @@ import { VenteJoursService } from "src/app/VenteJours/venteJours.service";
     UArticleComponent,
     DMouvementComponent,
     DVenteComponent,
-    EchangeComponent
+    EchangeComponent,
+    FilterEauxPipe,
+    FilterAutrePipe
   ],
   imports: [
     //firebase

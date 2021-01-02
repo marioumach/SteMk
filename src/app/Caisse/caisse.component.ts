@@ -39,7 +39,7 @@ export class CaisseComponent implements OnInit {
     Ventes: any[] = [];
     Tventes: any[] = [];
     JVentes: any[] = [];
-
+    Montant : number =0
     loading = false;
     articles: MatTableDataSource<any>;
     l: number
@@ -49,6 +49,9 @@ export class CaisseComponent implements OnInit {
         private caisseService: CaisseService) {
  this.update()
  
+    }
+    getRendu(){
+        return this.Montant-this.getTotalprix()
     }
     supprimer(i) {
 
@@ -89,7 +92,7 @@ export class CaisseComponent implements OnInit {
         this.caisseService.addVente(this.dataSource).then(() => {
             this.dataSource.forEach((element) => {
                 let i = this.active_articles.findIndex(i => i.key === element.article);
-                let qte = this.getReste(this.getArticle(element.article), i)
+                let qte = this.getArticle(element.article).quantite - element.quantite
                 this.caisseService.updateArticleQte(element.article, qte).catch(erreur => {
                     this.caisseService.showMsg("erreur Modififer quantite article")
                 })
@@ -109,17 +112,17 @@ export class CaisseComponent implements OnInit {
         const index = this.Articles.map(e => e.key).indexOf(key);
         return this.Articles[index];
     }
-    getReste(item, j) {
+    /* getReste(item, j) {
         return this.getTotalArticleEntree(item.key) - this.getTotalArticleVendu(j) - this.getTotalArticleSorti(item.key)
 
-    }
+    }*/
     getTotalprix() {
         return this.dataSource.map(t => t.prixUnit * t.quantite).reduce((acc, value) => acc + value, 0);
       }
       Nombre(total): any {
         return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
       };
-    getTotalArticleSorti(j: any) {
+    /*getTotalArticleSorti(j: any) {
         let qte = 0
         this.Mouvements.forEach(mouvement => {
             if (j == mouvement.article && mouvement.operation == 'Sortie')
@@ -127,7 +130,7 @@ export class CaisseComponent implements OnInit {
 
         });
         return qte
-    }
+    }*/
     Table(jvente) {
         let v: any[]
         let i = 0
@@ -184,26 +187,31 @@ export class CaisseComponent implements OnInit {
                 this.TVentes.push(element.key)
             }
         })
-        this.ventes.sort((a, b) => a < b ? 1 : 0);
-        let jour = this.ventes[0][0].date[0] + this.ventes[0][0].date[1]
-        let jVente = []
-        this.ventes.forEach(element => {
-            let date = element[0].date[0] + element[0].date[1]
-            if (date == jour) {
-                jVente.push(element)
-            }
-            else {
-                this.JVentes.push(jVente)
-                jour = date
-                jVente = []
-                jVente.push(element)
-            }
-        });
-        this.JVentes.push(jVente)
-        this.l=this.TVentes.length
-    
-}
-getTotalArticleVendu(j: any) {
+        if (this.ventes.length>0){        this.ventes.sort((a, b) => a < b ? 1 : 0);
+            let jour = this.ventes[0][0].date[0] + this.ventes[0][0].date[1]
+            let jVente = []
+            this.ventes.forEach(element => {
+                let date = element[0].date[0] + element[0].date[1]
+                if (date == jour) {
+                    jVente.push(element)
+                }
+                else {
+                    this.JVentes.push(jVente)
+                    jour = date
+                    jVente = []
+                    jVente.push(element)
+                }
+            });
+          
+            this.JVentes.push(jVente)
+            this.l=this.TVentes.length  
+    }
+    else
+    {this.l=0}
+        }
+
+
+/*getTotalArticleVendu(j: any) {
     let qte = 0
     let k = -1
     this.JVentes.forEach(J => {
@@ -211,7 +219,7 @@ getTotalArticleVendu(j: any) {
         qte += this.getArticleVendu(j, k)
     });
     return qte
-}
+}*/
 getArticleEntree(j, k: any) {
     let qte = 0
     this.Mouvements.forEach(mouvement => {
@@ -230,7 +238,7 @@ getArticleEntree(j, k: any) {
     return qte
 }
 
-getTotalArticleEntree(j: any) {
+/*getTotalArticleEntree(j: any) {
     let qte = 0
     this.Mouvements.forEach(mouvement => {
         if (j == mouvement.article && mouvement.operation == 'Entrée')
@@ -238,7 +246,7 @@ getTotalArticleEntree(j: any) {
 
     });
     return qte
-}
+}*/
 ngOnInit(): void {
 }
     update(){

@@ -27,7 +27,10 @@ padding-right: 0px !important;
 .example-cell, .example-header-cell {
   flex: 1;
 }
-
+.mat-tab-body-content {
+  height: 100%;
+  /* overflow: auto; */
+}
 .example-header-cell {
   font-size: 12px;
   font-weight: bold;

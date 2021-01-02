@@ -1,6 +1,6 @@
 <mat-accordion *ngIf="Historique=='stemk55413494'">
     <mat-expansion-panel *ngFor="let article of active_articles  ; let j = index;">
-      <mat-expansion-panel-header [ngStyle]="SetColorHistorique(article,j)">
+      <mat-expansion-panel-header >
         <mat-panel-title fxLayout="row" fxLayoutGap="20px" style="width :30%">
           <p fxLayoutAlign="center">{{article.reference}} </p>
           <p>

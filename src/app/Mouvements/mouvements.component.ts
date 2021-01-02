@@ -67,7 +67,7 @@ export class MouvementsComponent implements OnInit {
     AjoutMouvement() {
         this.loading = true
         let i = this.active_articles.findIndex(i => i.key === this.mouvement.article);
-        let qte = this.getReste(this.getArticle(this.mouvement.article), i)
+        let qte = this.getArticle(this.mouvement.article).quantite
         if (this.isValidInventaire === false) {
             let item = this.getArticle(this.mouvement.article).quantite;
             if (this.mouvement.operation === "Entrée") {
